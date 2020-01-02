@@ -80,7 +80,7 @@ class MainPage(QtWidgets.QMainWindow):
     # Functions
     def choose_files(self):
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
+        # options |= QFileDialog.DontUseNativeDialog
         files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', '',
                                                 'PDF bestanden (*.pdf)', options=options)
 
@@ -93,24 +93,33 @@ class MainPage(QtWidgets.QMainWindow):
                 self.criticalbox('Maximum bereikt!\nVoor het uploaden van meer bestanden koop de '
                                  'pro versie op:\nhttps://snipbasic.com/')
 
-        logging.info(self.files_total)
+        logging.info('Items in  files_total: {}'.format(self.files_total))
 
     # Clear Field
     def clear_field(self):
         self.plainTextEdit_source_files.clear()
         self.files_total = []
         self.toolButton_choose_files.setEnabled(True)
-        logging.info(self.files_total)
 
     # Save merged file
     def save_as(self):
         options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
+        # options |= QFileDialog.DontUseNativeDialog
         files, _ = QFileDialog.getSaveFileName(self, 'QFileDialog.getSaveFileName()', '',
                                                 'PDF bestanden (*.pdf)', options=options)
 
         if files:
-            self.plainTextEdit_filename.setPlainText(files + '.pdf')
+            file, extension = os.path.splitext(files)
+            if extension:
+                if '.pdf' in extension:
+                    self.plainTextEdit_filename.setPlainText(files)
+                    logging.info('Save file as: {}'.format(files))
+                else:
+                    self.warningbox('\nDe extensie {} is niet toegestaan'.format(extension))
+                    logging.info('Save file as: {} is not allowed'.format(extension))
+            else:
+                self.plainTextEdit_filename.setPlainText(files + '.pdf')
+                logging.info('Save file as: {}.pdf'.format(files))
         else:
             pass
 
@@ -185,7 +194,6 @@ class MainPage(QtWidgets.QMainWindow):
             # pdf_1_file.close()
             # pdf_2_file.close()
 
-    # Check op alle invoervelden
 
     # Messageboxen
     def criticalbox(self, message):
