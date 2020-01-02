@@ -20,34 +20,34 @@
    <widget class="QPushButton" name="pushButton_merge">
     <property name="geometry">
      <rect>
-      <x>462</x>
-      <y>351</y>
+      <x>460</x>
+      <y>350</y>
       <width>151</width>
       <height>71</height>
      </rect>
     </property>
     <property name="text">
-     <string>Merge</string>
+     <string>Samenvoegen</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_delete_old">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>320</y>
-      <width>151</width>
+      <x>110</x>
+      <y>330</y>
+      <width>251</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Delete old files</string>
+     <string>Verwijderen oude bestanden</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_logo">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>30</y>
+      <y>40</y>
       <width>171</width>
       <height>16</height>
      </rect>
@@ -56,53 +56,61 @@
      <string>MergePDF logo</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_filename">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>250</y>
-      <width>131</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>New file name</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_filename">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>270</y>
-      <width>113</width>
+      <x>110</x>
+      <y>290</y>
+      <width>371</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
+    <property name="cursorPosition">
+     <number>0</number>
+    </property>
+    <property name="placeholderText">
+     <string>Bestandsnaam nieuwe PDF</string>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QToolButton" name="toolButton_choose_files">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>80</y>
-      <width>26</width>
+      <x>110</x>
+      <y>230</y>
+      <width>111</width>
       <height>22</height>
      </rect>
     </property>
     <property name="text">
-     <string>...</string>
+     <string>Bestanden kiezen...</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="plainTextEdit_source_files">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>110</x>
       <y>80</y>
-      <width>241</width>
+      <width>371</width>
       <height>141</height>
      </rect>
     </property>
     <property name="readOnly">
      <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Geen bestanden gekozen</string>
     </property>
    </widget>
   </widget>
