@@ -26,9 +26,9 @@ if 'Windows' in what_os:
     username = os.environ.get('USERNAME')
     start_location = 'c:\\Users\\{}\\Documents'.format(username)
 else:
-    # username = os.environ.get('USER')
-    # start_location = '/Users/{}/Documents'.format(username)
-    start_location = os.getcwd()  # Tijdelijk
+    username = os.environ.get('USER')
+    start_location = '/Users/{}/Documents'.format(username)
+    # start_location = os.getcwd()  # Tijdelijk
 
 
 class MainPage(QtWidgets.QMainWindow):
@@ -68,10 +68,13 @@ class MainPage(QtWidgets.QMainWindow):
 
         # Filename field
         # lineEdit_filename
-        # self.lineEdit_filename.text()
 
         # Remove old files checkbox
         # checkBox_delete_old
+        if self.checkBox_delete_old.isChecked():
+            logging.info('Checkbox is checked')
+        else:
+            logging.info('Checkbox is unchecked')
 
         # Merge button
         # pushButton_merge
@@ -93,13 +96,14 @@ class MainPage(QtWidgets.QMainWindow):
                 self.criticalbox('Maximum bereikt!\nVoor het uploaden van meer bestanden koop de '
                                  'pro versie op:\nhttps://snipbasic.com/')
 
-        logging.info('Items in  files_total: {}'.format(self.files_total))
+        logging.info('Items in  files_total: {}'.format(len(self.files_total)))
 
     # Clear Field
     def clear_field(self):
         self.plainTextEdit_source_files.clear()
         self.files_total = []
         self.toolButton_choose_files.setEnabled(True)
+        logging.info('Items in  files_total: {}'.format(len(self.files_total)))
 
     # Save merged file
     def save_as(self):
@@ -133,39 +137,40 @@ class MainPage(QtWidgets.QMainWindow):
         elif not save_location:
             self.warningbox('\n\nBepaal de locatie voor het opslaan')  # No save location
         else:
-            file_content = []
-            for file in self.files_total:
-                with open:
-                    content = open(file, 'rb')
 
-                    file_content.append(content)
-
-            for i in range(len(self.files_total)):
-                logging.info(self.files_total[i])
-
-            pdf_file_1 = open(self.files_total[0], 'rb')
-            pdf_file_2 = open(self.files_total[1], 'rb')
-
-            reader_1 = PyPDF2.PdfFileReader(pdf_file_1)
-            reader_2 = PyPDF2.PdfFileReader(pdf_file_2)
-
-            writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
-
-            for page_number in range(reader_1.numPages):
-                page = reader_1.getPage(page_number)  # Opvragen van de pagina's
-                writer.addPage(page)  # Toevoegen van de pagina's aan het nieuwe bestand
-
-            for page_number in range(reader_2.numPages):
-                page = reader_2.getPage(page_number)  # Opvragen van de pagina's
-                writer.addPage(page)  # Toevoegen van de pagina's aan het nieuwe bestand
-
-            output_file = open(self.new_filename, 'wb')
-
-            writer.write(output_file)
-
-            output_file.close()
-            pdf_file_1.close()
-            pdf_file_2.close()
+            # file_content = []
+            # for file in self.files_total:
+            #     with open:
+            #         content = open(file, 'rb')
+            #
+            #         file_content.append(content)
+            #
+            # for i in range(len(self.files_total)):
+            #     logging.info(self.files_total[i])
+            #
+            # pdf_file_1 = open(self.files_total[0], 'rb')
+            # pdf_file_2 = open(self.files_total[1], 'rb')
+            #
+            # reader_1 = PyPDF2.PdfFileReader(pdf_file_1)
+            # reader_2 = PyPDF2.PdfFileReader(pdf_file_2)
+            #
+            # writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
+            #
+            # for page_number in range(reader_1.numPages):
+            #     page = reader_1.getPage(page_number)  # Opvragen van de pagina's
+            #     writer.addPage(page)  # Toevoegen van de pagina's aan het nieuwe bestand
+            #
+            # for page_number in range(reader_2.numPages):
+            #     page = reader_2.getPage(page_number)  # Opvragen van de pagina's
+            #     writer.addPage(page)  # Toevoegen van de pagina's aan het nieuwe bestand
+            #
+            # output_file = open(self.new_filename, 'wb')
+            #
+            # writer.write(output_file)
+            #
+            # output_file.close()
+            # pdf_file_1.close()
+            # pdf_file_2.close()
 
             # Combineren PDF files
             # pdf_1_file = open('meetingminutes1.pdf', 'rb')  # Openen PDF bestand
@@ -193,7 +198,13 @@ class MainPage(QtWidgets.QMainWindow):
             # output_file.close()
             # pdf_1_file.close()
             # pdf_2_file.close()
-
+            if self.checkBox_delete_old.isChecked():
+                logging.info('Checkbox is checked')
+                for files in range(len(self.files_total)):
+                    logging.info('File removed: {}'.format(self.files_total[files]))
+                    os.unlink(self.files_total[files])
+            else:
+                logging.info('Checkbox is unchecked')
 
     # Messageboxen
     def criticalbox(self, message):
