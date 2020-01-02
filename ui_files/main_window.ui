@@ -20,11 +20,16 @@
    <widget class="QPushButton" name="pushButton_merge">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>350</y>
-      <width>151</width>
-      <height>71</height>
+      <x>390</x>
+      <y>360</y>
+      <width>121</width>
+      <height>61</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Samenvoegen</string>
@@ -33,11 +38,16 @@
    <widget class="QCheckBox" name="checkBox_delete_old">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>330</y>
+      <x>130</x>
+      <y>360</y>
       <width>251</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Verwijderen oude bestanden</string>
@@ -53,58 +63,43 @@
      </rect>
     </property>
     <property name="text">
-     <string>MergePDF logo</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_filename">
+   <widget class="QToolButton" name="toolButton_choose_files">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>290</y>
-      <width>371</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::ClickFocus</enum>
-    </property>
-    <property name="cursorPosition">
-     <number>0</number>
-    </property>
-    <property name="placeholderText">
-     <string>Bestandsnaam nieuwe PDF</string>
-    </property>
-    <property name="clearButtonEnabled">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QToolButton" name="toolButton_choose_files">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>230</y>
-      <width>111</width>
+      <x>130</x>
+      <y>250</y>
+      <width>121</width>
       <height>22</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>Bestanden kiezen...</string>
+     <string>Bestanden uploaden...</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="plainTextEdit_source_files">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>80</y>
+      <x>130</x>
+      <y>100</y>
       <width>371</width>
       <height>141</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
     </property>
     <property name="readOnly">
      <bool>true</bool>
@@ -119,14 +114,51 @@
    <widget class="QToolButton" name="toolButton_clear_field">
     <property name="geometry">
      <rect>
-      <x>405</x>
-      <y>230</y>
-      <width>71</width>
+      <x>470</x>
+      <y>250</y>
+      <width>31</width>
       <height>22</height>
      </rect>
     </property>
     <property name="text">
-     <string>Leeg veld</string>
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_save_as">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>280</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Opslaan als...</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit_filename">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>310</y>
+      <width>371</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
+    <property name="placeholderText">
+     <string>...</string>
     </property>
    </widget>
   </widget>
