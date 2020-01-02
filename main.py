@@ -16,7 +16,7 @@ except Exception:
 
 # Set logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-# logging.disable(logging.CRITICAL)
+logging.disable(logging.DEBUG)
 
 # What OS is running
 what_os = platform.system()
@@ -45,6 +45,7 @@ class MainPage(QtWidgets.QMainWindow):
         # Select files button
         # toolButton_choose_files
         self.toolButton_choose_files.clicked.connect(self.choose_files)
+        self.files_total = []
 
         # Clear field button
         # toolButton_clear_field
@@ -66,20 +67,17 @@ class MainPage(QtWidgets.QMainWindow):
         files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', '',
                                                 'PDF bestanden (*.pdf)', options=options)
 
-        logging.debug(type(files))
-        logging.debug(files)
-
-        files_total = []
-
         for i in range(len(files)):
             self.plainTextEdit_source_files.appendPlainText(files[i])
-            files_total.append(files[i])
+            self.files_total.append(files[i])
 
-        print(files_total)
+        logging.info(self.files_total)
 
     # Clear Field
     def clear_field(self):
         self.plainTextEdit_source_files.clear()
+        self.files_total = []
+        logging.info(self.files_total)
 
 
 
