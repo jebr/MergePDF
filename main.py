@@ -66,12 +66,9 @@ class MainPage(QtWidgets.QMainWindow):
         files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', '',
                                                 'PDF bestanden (*.pdf)', options=options)
 
-        # self.plainTextEdit_source_files.appendPlainText(files)
-
         logging.debug(type(files))
-        # files.append(files)
         logging.debug(files)
-        # self.plainTextEdit_source_files.appendPlainText(str(files))
+
         files_total = []
 
         for i in range(len(files)):
