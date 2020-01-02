@@ -94,7 +94,7 @@ class MainPage(QtWidgets.QMainWindow):
             else:
                 self.toolButton_choose_files.setEnabled(False)
                 self.criticalbox('Maximum bereikt!\nVoor het uploaden van meer bestanden koop de '
-                                 'pro versie op:\nhttps://snipbasic.com/')
+                                 'pro versie\nhttps://snipbasic.com/')
 
         logging.info('Items in  files_total: {}'.format(len(self.files_total)))
 
@@ -198,11 +198,19 @@ class MainPage(QtWidgets.QMainWindow):
             # output_file.close()
             # pdf_1_file.close()
             # pdf_2_file.close()
+
             if self.checkBox_delete_old.isChecked():
                 logging.info('Checkbox is checked')
-                for files in range(len(self.files_total)):
-                    logging.info('File removed: {}'.format(self.files_total[files]))
-                    os.unlink(self.files_total[files])
+                # for files in range(len(self.files_total)):
+                #     logging.info('File removed: {}'.format(self.files_total[files]))
+                #     if self.files_total:
+                #         os.unlink(self.files_total[files])
+                self.plainTextEdit_source_files.clear()
+                self.files_total = []
+                self.toolButton_choose_files.setEnabled(True)
+                self.checkBox_delete_old.setChecked(False)
+                self.plainTextEdit_filename.clear()
+
             else:
                 logging.info('Checkbox is unchecked')
 

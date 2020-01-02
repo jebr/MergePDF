@@ -8,8 +8,8 @@
 # Check op minimaal 2 documenten DONE
 # Blokkeer de samenvoeg knop totdat alle velden ingevoerd zijn DONE
 # Controle op invoer nieuwe bestandsnaam DONE
+# Checkbox verwijderen oude bestanden koppelen  DONE
 
-# Checkbox verwijderen oude bestanden koppelen aan variabele
 # Functie maken voor het samenvoegen van de PDF bestanden
 # De samenvoegknop de functie laten uitvoeren
 # Het nieuwe bestand openen na samenvoegen
