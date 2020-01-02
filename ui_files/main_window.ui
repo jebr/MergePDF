@@ -113,6 +113,19 @@
      <string>Geen bestanden gekozen</string>
     </property>
    </widget>
+   <widget class="QToolButton" name="toolButton_clear_field">
+    <property name="geometry">
+     <rect>
+      <x>405</x>
+      <y>230</y>
+      <width>71</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Leeg veld</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

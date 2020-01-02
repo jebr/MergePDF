@@ -9,8 +9,6 @@ from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui
 
-# from PyQt5.QtCore import QStringList
-
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
 except Exception:
@@ -48,6 +46,10 @@ class MainPage(QtWidgets.QMainWindow):
         # toolButton_choose_files
         self.toolButton_choose_files.clicked.connect(self.choose_files)
 
+        # Clear field button
+        # toolButton_clear_field
+        self.toolButton_clear_field.clicked.connect(self.clear_field)
+
         # Filename field
         # lineEdit_filename
 
@@ -60,26 +62,27 @@ class MainPage(QtWidgets.QMainWindow):
     # Functions
     def choose_files(self):
         options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "QFileDialog.getOpenFileNames()", "",
-                                                "All Files (*);;Python Files (*.py)", options=options)
+        options |= QFileDialog.DontUseNativeDialog
+        files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', '',
+                                                'PDF bestanden (*.pdf)', options=options)
 
         # self.plainTextEdit_source_files.appendPlainText(files)
-        if files:
-            logging.debug(type(files))
-            # files.append(files)
-            logging.debug(files)
-            # self.plainTextEdit_source_files.appendPlainText(str(files))
-            files_total = ''
 
-            for i in range(len(files)):
-                self.plainTextEdit_source_files.appendPlainText(files[i])
-                files.append([i])
+        logging.debug(type(files))
+        # files.append(files)
+        logging.debug(files)
+        # self.plainTextEdit_source_files.appendPlainText(str(files))
+        files_total = []
 
-            print(type(files))
-            print(len(files))
-            print(files)
+        for i in range(len(files)):
+            self.plainTextEdit_source_files.appendPlainText(files[i])
+            files_total.append(files[i])
 
+        print(files_total)
+
+    # Clear Field
+    def clear_field(self):
+        self.plainTextEdit_source_files.clear()
 
 
 
