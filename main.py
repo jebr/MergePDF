@@ -144,17 +144,17 @@ class MainPage(QtWidgets.QMainWindow):
 
             logging.info(self.new_file_content)
 
-            # reader = PyPDF2.PdfFileReader(self.new_file_content)
+            reader = PyPDF2.PdfFileReader(self.new_file_content)
 
-            # writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
+            writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
 
-            # for page_number in range(reader.numPages):
-            #     page = reader.getPage(page_number)  # Opvragen van de pagina's
-            #     writer.addPage(page)  # Toevoegen van de pagina's aan het nieuwe bestand
+            for page_number in range(reader.numPages):
+                page = reader.getPage(page_number)  # Opvragen van de pagina's
+                writer.addPage(page)  # Toevoegen van de pagina's aan het nieuwe bestand
 
-            # output_file = open(self.new_filename, 'wb')
+            output_file = open(self.new_filename, 'wb')
 
-            # output_file.close()
+            output_file.close()
 
             ############################
             # self.new_file_content = []
@@ -220,14 +220,14 @@ class MainPage(QtWidgets.QMainWindow):
 
             if self.checkBox_delete_old.isChecked():
                 logging.info('Checkbox is checked')
-                # Delete files
+                # Delete files (Tijdelijk uitgeschakeld)
                 # for files in range(len(self.files_total)):
                 #     logging.info('File removed: {}'.format(self.files_total[files]))
                 #     if self.files_total:
                 #         os.unlink(self.files_total[files])
                 self.checkBox_delete_old.setChecked(False)  # Reset checkbox
 
-            # Reset input fields
+            # Reset input fields (Tijdelijk uitgeschakeld)
             # self.plainTextEdit_source_files.clear()
             # self.files_total = []
             # self.toolButton_choose_files.setEnabled(True)
