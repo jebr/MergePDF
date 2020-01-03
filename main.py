@@ -31,6 +31,7 @@ else:
     # start_location = os.getcwd()  # Tijdelijk
 
 
+# PyQT GUI
 class MainPage(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -55,7 +56,7 @@ class MainPage(QtWidgets.QMainWindow):
         # Select files button
         # toolButton_choose_files
         self.toolButton_choose_files.clicked.connect(self.choose_files)
-        self.files_total = []
+        self.files_total = []  # List of upload files
 
         # Clear field button
         # toolButton_clear_field
@@ -71,14 +72,11 @@ class MainPage(QtWidgets.QMainWindow):
 
         # Remove old files checkbox
         # checkBox_delete_old
-        if self.checkBox_delete_old.isChecked():
-            logging.info('Checkbox is checked')
-        else:
-            logging.info('Checkbox is unchecked')
 
         # Merge button
         # pushButton_merge
         self.pushButton_merge.clicked.connect(self.merge_files)
+        self.new_file_content = []  # List of new file content
 
     # Functions
     def choose_files(self):
@@ -87,6 +85,7 @@ class MainPage(QtWidgets.QMainWindow):
         files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', '',
                                                 'PDF bestanden (*.pdf)', options=options)
 
+        # File selector
         for i in range(len(files)):
             if len(self.files_total) < 5:
                 self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
@@ -114,7 +113,7 @@ class MainPage(QtWidgets.QMainWindow):
 
         if files:
             file, extension = os.path.splitext(files)
-            if extension:
+            if extension:  # Check file extension
                 if '.pdf' in extension:
                     self.plainTextEdit_filename.setPlainText(files)
                     logging.info('Save file as: {}'.format(files))
@@ -129,6 +128,7 @@ class MainPage(QtWidgets.QMainWindow):
 
     # Merge Files
     def merge_files(self):
+        # Check save as field
         save_location = self.plainTextEdit_filename.toPlainText()
 
         # Checks
@@ -137,8 +137,27 @@ class MainPage(QtWidgets.QMainWindow):
         elif not save_location:
             self.warningbox('\n\nBepaal de locatie voor het opslaan')  # No save location
         else:
+            for file in range(len(self.files_total)):
+                with open:
+                    content = open(file, 'rb')
+                    self.new_file_content.append(content)
 
-            # file_content = []
+            logging.info(self.new_file_content)
+
+            # reader = PyPDF2.PdfFileReader(self.new_file_content)
+
+            # writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
+
+            # for page_number in range(reader.numPages):
+            #     page = reader.getPage(page_number)  # Opvragen van de pagina's
+            #     writer.addPage(page)  # Toevoegen van de pagina's aan het nieuwe bestand
+
+            # output_file = open(self.new_filename, 'wb')
+
+            # output_file.close()
+
+            ############################
+            # self.new_file_content = []
             # for file in self.files_total:
             #     with open:
             #         content = open(file, 'rb')
@@ -201,18 +220,18 @@ class MainPage(QtWidgets.QMainWindow):
 
             if self.checkBox_delete_old.isChecked():
                 logging.info('Checkbox is checked')
+                # Delete files
                 # for files in range(len(self.files_total)):
                 #     logging.info('File removed: {}'.format(self.files_total[files]))
                 #     if self.files_total:
                 #         os.unlink(self.files_total[files])
-                self.plainTextEdit_source_files.clear()
-                self.files_total = []
-                self.toolButton_choose_files.setEnabled(True)
-                self.checkBox_delete_old.setChecked(False)
-                self.plainTextEdit_filename.clear()
+                self.checkBox_delete_old.setChecked(False)  # Reset checkbox
 
-            else:
-                logging.info('Checkbox is unchecked')
+            # Reset input fields
+            # self.plainTextEdit_source_files.clear()
+            # self.files_total = []
+            # self.toolButton_choose_files.setEnabled(True)
+            # self.plainTextEdit_filename.clear()
 
     # Messageboxen
     def criticalbox(self, message):
