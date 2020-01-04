@@ -14,3 +14,4 @@
 - [ ] De samenvoegknop de functie laten uitvoeren
 - [ ] Het nieuwe bestand openen na samenvoegen
 
+
