@@ -1,3 +1,7 @@
+.git status
 venv/
-.DS_Store
 .idea/
+/*.cmake
+/*.DS_Store
+/.user
+/build
