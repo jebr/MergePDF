@@ -1,16 +1,16 @@
-# Selecteer de bestanden die gecombineerd moeten worden  DONE
-# Sla deze bestanden op in een variabele  DONE (LIST)
-# Geef de geselecteerde bestanden weer in het venster  DONE
-# Knop maken voor het resetten van de documenten DONE
-# Maximum van 5 bestanden combineren DONE
-# Nieuwe bestandsnaam koppelen aan variabele  DONE
-# Alleen bestandsnaam weergeven ipv het complete pad  DONE
-# Check op minimaal 2 documenten DONE
-# Blokkeer de samenvoeg knop totdat alle velden ingevoerd zijn DONE
-# Controle op invoer nieuwe bestandsnaam DONE
-# Checkbox verwijderen oude bestanden koppelen  DONE
+- [x] Selecteer de bestanden die gecombineerd moeten worden
+- [x] Sla deze bestanden op in een variabele (LIST)
+- [x] Geef de geselecteerde bestanden weer in het venster
+- [x] Knop maken voor het resetten van de documenten
+- [x] Maximum van 5 bestanden combineren
+- [x] Nieuwe bestandsnaam koppelen aan variabele
+- [x] Alleen bestandsnaam weergeven ipv het complete pad
+- [x] Check op minimaal 2 documenten
+- [x] Blokkeer de samenvoeg knop totdat alle velden ingevoerd zijn
+- [x] Controle op invoer nieuwe bestandsnaam
+- [x] Checkbox verwijderen oude bestanden koppelen
 
-# Functie maken voor het samenvoegen van de PDF bestanden
-# De samenvoegknop de functie laten uitvoeren
-# Het nieuwe bestand openen na samenvoegen
+- [ ] Functie maken voor het samenvoegen van de PDF bestanden
+- [ ] De samenvoegknop de functie laten uitvoeren
+- [ ] Het nieuwe bestand openen na samenvoegen
 
