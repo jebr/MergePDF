@@ -1,0 +1,7 @@
+git status
+/venv
+.idea/
+/*.cmake
+/*.DS_Store
+/.user
+/build
