@@ -139,20 +139,21 @@ class MainPage(QtWidgets.QMainWindow):
             return
 
         writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
-        pdf_file_objs = [open(file, 'rb') for file in self.files_total]
-        readers = [PyPDF2.PdfFileReader(pdf_file_obj) for pdf_file_obj in pdf_file_objs]
-        for file in readers:
-            for page in range(file.numPages):
-                writer.addPage(file.getPage(page))
+        try:
+	        pdf_file_objs = [open(file, 'rb') for file in self.files_total]
+	        readers = [PyPDF2.PdfFileReader(pdf_file_obj) for pdf_file_obj in pdf_file_objs]
+	        for file in readers:
+	            for page in range(file.numPages):
+	                writer.addPage(file.getPage(page))
 
-        # IMPORTANT! Make sure to save the new file before closing the involved pdf files
-        with open(save_location, 'wb') as output_file:
-            writer.write(output_file)
+	        # IMPORTANT! Make sure to save the new file before closing the involved pdf files
+	        with open(save_location, 'wb') as output_file:
+	            writer.write(output_file)
+	    finally:
+	        # Now close all the files
+	        [elem.close() for elem in pdf_file_objs]
 
-        # Now close all the files
-        [elem.close() for elem in pdf_file_objs]
 
-        # Niet getest
         if self.checkBox_delete_old.isChecked():
             logging.info('Checkbox is checked')
             self.checkBox_delete_old.setChecked(False)  # Reset checkbox

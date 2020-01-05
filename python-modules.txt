@@ -1,7 +1,2 @@
 PyPDF2
 PyQT5
-OS
-SYS
-Platform
-logging
-
