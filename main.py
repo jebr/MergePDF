@@ -17,8 +17,8 @@ except Exception:
     pass
 
 # Set logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-logging.disable(logging.DEBUG)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# logging.disable(logging.DEBUG)
 
 # What OS is running
 what_os = platform.system()
@@ -119,45 +119,56 @@ class MainPage(QtWidgets.QMainWindow):
                     logging.info('Save file as: {}'.format(files))
                 else:
                     self.warningbox('\nDe extensie {} is niet toegestaan'.format(extension))
-                    logging.info('Save file as: {} is not allowed'.format(extension))
+                    logging.error('Save file as: {} is not allowed'.format(extension))
             else:
                 self.plainTextEdit_filename.setPlainText(files + '.pdf')
                 logging.info('Save file as: {}.pdf'.format(files))
 
-    # Merge Files  - dont state the obvious
+    # Merge Files
     def merge_files(self):
         save_location = self.plainTextEdit_filename.toPlainText()
 
         # Checks
         if len(self.files_total) < 2:
-            # TODO voeg logging toe
-            self.warningbox('\n\nUpload minimaal 2 PDF documenten')  # Less than 2 documents
-            return  # zorgt ervoor dat de functie afgebroken wordt
+            logging.error('Less than 2 documents')
+            self.warningbox('Upload minimaal 2 PDF documenten')  # Less than 2 documents
+            return
         if not save_location:
-            # TODO voeg loggin toe
-            self.warningbox('\n\nBepaal de locatie voor het opslaan')  # No save location
+            logging.error('No save location set')
+            self.warningbox('Bepaal de locatie voor het opslaan')  # No save location
             return
 
         writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
+
         try:
-	        pdf_file_objs = [open(file, 'rb') for file in self.files_total]
-	        readers = [PyPDF2.PdfFileReader(pdf_file_obj) for pdf_file_obj in pdf_file_objs]
-	        for file in readers:
-	            for page in range(file.numPages):
-	                writer.addPage(file.getPage(page))
+            pdf_file_objs = [open(file, 'rb') for file in self.files_total]
+            readers = [PyPDF2.PdfFileReader(pdf_file_obj) for pdf_file_obj in pdf_file_objs]
+            for file in readers:
+                for page in range(file.numPages):
+                    writer.addPage(file.getPage(page))
 
-	        # IMPORTANT! Make sure to save the new file before closing the involved pdf files
-	        with open(save_location, 'wb') as output_file:
-	            writer.write(output_file)
-	    finally:
-	        # Now close all the files
-	        [elem.close() for elem in pdf_file_objs]
-
+            # IMPORTANT! Make sure to save the new file before closing the involved pdf files
+            with open(save_location, 'wb') as output_file:
+                writer.write(output_file)
+        finally:
+            # Now close all the files
+            [elem.close() for elem in pdf_file_objs]
 
         if self.checkBox_delete_old.isChecked():
             logging.info('Checkbox is checked')
+            # Delete files
+            for files in range(len(self.files_total)):
+                logging.info('File removed: {}'.format(self.files_total[files]))
+                if self.files_total:
+                    os.unlink(self.files_total[files])
             self.checkBox_delete_old.setChecked(False)  # Reset checkbox
+            return
 
+        # Reset input fields
+        self.plainTextEdit_source_files.clear()
+        self.files_total = []
+        self.toolButton_choose_files.setEnabled(True)
+        self.plainTextEdit_filename.clear()
 
     # Messageboxen
     def criticalbox(self, message):
