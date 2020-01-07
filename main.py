@@ -3,6 +3,7 @@ import os
 import platform
 import logging
 import PyPDF2
+import webbrowser
 
 from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
     QTableWidgetItem, QWidget, QLabel
@@ -24,11 +25,16 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 what_os = platform.system()
 if 'Windows' in what_os:
     username = os.environ.get('USERNAME')
-    start_location = 'c:\\Users\\{}\\Documents'.format(username)
+    # start_location = 'c:\\Users\\{}\\Documents'.format(username)
+    # TODO verwijderen voor release
+    start_location = os.getcwd()  # Development setting
+    logging.info('OS: Windows')
 else:
     username = os.environ.get('USER')
     start_location = '/Users/{}/Documents'.format(username)
-    # start_location = os.getcwd()  # Tijdelijk
+    # TODO verwijderen voor release
+    # start_location = os.getcwd()  # Development setting
+    logging.info('OS: MacOS  or Linux')
 
 
 # PyQT GUI
@@ -40,7 +46,7 @@ class MainPage(QtWidgets.QMainWindow):
         # Set Size Application
         self.setFixedSize(640, 480)
         # Set Application Icon
-        self.setWindowIcon(QtGui.QIcon('./assets/merge-logo.ico'))
+        self.setWindowIcon(QtGui.QIcon('./assets/merge-logo.svg'))
 
         # Logo
         # label_logo
@@ -82,7 +88,7 @@ class MainPage(QtWidgets.QMainWindow):
     def choose_files(self):
         options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', '',
+        files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', start_location,
                                                 'PDF bestanden (*.pdf)', options=options)
 
         # File selector
@@ -108,7 +114,7 @@ class MainPage(QtWidgets.QMainWindow):
     def save_as(self):
         options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getSaveFileName(self, 'QFileDialog.getSaveFileName()', '',
+        files, _ = QFileDialog.getSaveFileName(self, 'QFileDialog.getSaveFileName()', start_location,
                                                 'PDF bestanden (*.pdf)', options=options)
 
         if files:
@@ -150,9 +156,12 @@ class MainPage(QtWidgets.QMainWindow):
             # IMPORTANT! Make sure to save the new file before closing the involved pdf files
             with open(save_location, 'wb') as output_file:
                 writer.write(output_file)
+
         finally:
             # Now close all the files
             [elem.close() for elem in pdf_file_objs]
+
+        logging.info('File merge completed')
 
         if self.checkBox_delete_old.isChecked():
             logging.info('Checkbox is checked')
@@ -162,13 +171,25 @@ class MainPage(QtWidgets.QMainWindow):
                 if self.files_total:
                     os.unlink(self.files_total[files])
             self.checkBox_delete_old.setChecked(False)  # Reset checkbox
-            return
+
+        # Open the new file
+        if self.checkBox_open_file.isChecked():
+            try:
+                # TODO Nakijken of dit ook werkt op MacOS en Linux. Als dit werkt webbrowser verwijderen
+                os.startfile(save_location)
+                # webbrowser.open_new(r'{}'.format(save_location))
+                logging.info('Open file after merge')
+            except Exception:
+                self.warningbox('Het nieuwe bestand is aangemaakt maar kon niet geopend worden.')
+                logging.error('{} Can not be opened'.format(save_location))
 
         # Reset input fields
         self.plainTextEdit_source_files.clear()
         self.files_total = []
         self.toolButton_choose_files.setEnabled(True)
         self.plainTextEdit_filename.clear()
+        self.checkBox_open_file.setChecked(False)
+        logging.info('Reset all fields completed')
 
     # Messageboxen
     def criticalbox(self, message):
