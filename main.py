@@ -152,7 +152,6 @@ class MainPage(QtWidgets.QMainWindow):
     # Functions
     def choose_files(self):
         options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
         files, _ = QFileDialog.getOpenFileNames(self, " ", start_location,
                                                 self.files_filename_window, options=options)
 
@@ -178,7 +177,6 @@ class MainPage(QtWidgets.QMainWindow):
     # Save merged file
     def save_as(self):
         options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
         files, _ = QFileDialog.getSaveFileName(self, " ", start_location,
                                                 self.files_filename_window, options=options)
 
