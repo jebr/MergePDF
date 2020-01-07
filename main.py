@@ -4,6 +4,8 @@ import platform
 import logging
 import PyPDF2
 import webbrowser
+import ctypes
+import locale
 
 from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
     QTableWidgetItem, QWidget, QLabel
@@ -31,9 +33,9 @@ if 'Windows' in what_os:
     logging.info('OS: Windows')
 else:
     username = os.environ.get('USER')
-    start_location = '/Users/{}/Documents'.format(username)
+    # start_location = '/Users/{}/Documents'.format(username)
     # TODO verwijderen voor release
-    # start_location = os.getcwd()  # Development setting
+    start_location = os.getcwd()  # Development setting
     logging.info('OS: MacOS  or Linux')
 
 
@@ -84,12 +86,47 @@ class MainPage(QtWidgets.QMainWindow):
         self.pushButton_merge.clicked.connect(self.merge_files)
         self.new_file_content = []  # List of new file content
 
+        # Taal instellingen
+        if 'Windows' in what_os:
+            windll = ctypes.windll.kernel32
+            windll.GetUserDefaultUILanguage()
+            self.os_language = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+            logging.info('System language: {}'.format(self.os_language))
+            if "nl" in self.os_language:
+                # Buttons and fields NL (Only windows)
+                self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
+                self.toolButton_choose_files.setText('Bestanden uploaden...')
+                self.toolButton_save_as.setText('Opslaan als...')
+                self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
+                self.checkBox_open_file.setText('Open het bestand na het samenvoegen')
+                self.checkBox_delete_old.setText('Verwijder oude bestanden')
+                self.pushButton_merge.setText('Samenvoegen')
+                self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
+                # QFileDialog
+                self.upload_files_window = "Upload PDF bestanden"
+                self.save_files_window = 'PDF bestand opslaan als...'
+                self.files_filename_window = 'PDF bestanden (*.pdf)'
+        else:
+            # Buttons and fields EN
+            self.plainTextEdit_source_files.setPlaceholderText('PDF files')
+            self.toolButton_choose_files.setText('Upload files...')
+            self.toolButton_save_as.setText('Save as...')
+            self.plainTextEdit_filename.setPlaceholderText('Save location')
+            self.checkBox_open_file.setText('Open file after merge')
+            self.checkBox_delete_old.setText('Delete old files')
+            self.pushButton_merge.setText('Merge')
+            self.toolButton_clear_field.setToolTip('Clear upload field')
+            # QFileDialog
+            self.upload_files_window = 'Upload PDF files'
+            self.save_files_window = 'Save PDF file as...'
+            self.filename_window = 'PDF files (*.pdf)'
+
     # Functions
     def choose_files(self):
         options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, 'QFileDialog.getOpenFileNames()', start_location,
-                                                'PDF bestanden (*.pdf)', options=options)
+        files, _ = QFileDialog.getOpenFileNames(self, self.upload_files_window, start_location,
+                                                self.filename_window, options=options)
 
         # File selector
         for i in range(len(files)):
@@ -114,8 +151,8 @@ class MainPage(QtWidgets.QMainWindow):
     def save_as(self):
         options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getSaveFileName(self, 'QFileDialog.getSaveFileName()', start_location,
-                                                'PDF bestanden (*.pdf)', options=options)
+        files, _ = QFileDialog.getSaveFileName(self, self.save_files_window, start_location,
+                                                self.filename_window, options=options)
 
         if files:
             file, extension = os.path.splitext(files)

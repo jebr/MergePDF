@@ -109,9 +109,6 @@
     <property name="textInteractionFlags">
      <set>Qt::NoTextInteraction</set>
     </property>
-    <property name="placeholderText">
-     <string>PDF bestanden</string>
-    </property>
    </widget>
    <widget class="QToolButton" name="toolButton_clear_field">
     <property name="geometry">
@@ -158,9 +155,6 @@
     </property>
     <property name="textInteractionFlags">
      <set>Qt::NoTextInteraction</set>
-    </property>
-    <property name="placeholderText">
-     <string>Locatie voor opslaan</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_open_file">
