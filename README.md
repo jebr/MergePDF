@@ -1,4 +1,4 @@
-![Logo](assets/merge-logo.svg?raw=true "Logo MergePDF)
+![Logo](assets/merge-logo.svg?raw=true "Logo MergePDF")
 # MergePDF
 
 Merge multiple PDF files to a singe PDF file
