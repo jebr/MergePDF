@@ -3,9 +3,9 @@ import os
 import platform
 import logging
 import PyPDF2
-import webbrowser
 import ctypes
 import locale
+import subprocess
 
 from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
     QTableWidgetItem, QWidget, QLabel
@@ -36,7 +36,7 @@ else:
     # start_location = '/Users/{}/Documents'.format(username)
     # TODO verwijderen voor release
     start_location = os.getcwd()  # Development setting
-    logging.info('OS: MacOS  or Linux')
+    logging.info('OS: MacOS or Linux')
 
 
 # PyQT GUI
@@ -103,30 +103,58 @@ class MainPage(QtWidgets.QMainWindow):
                 self.pushButton_merge.setText('Samenvoegen')
                 self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
                 # QFileDialog
-                self.upload_files_window = "Upload PDF bestanden"
-                self.save_files_window = 'PDF bestand opslaan als...'
                 self.files_filename_window = 'PDF bestanden (*.pdf)'
+                # Messageboxes
+            else:
+                # Buttons and fields EN
+                self.plainTextEdit_source_files.setPlaceholderText('PDF files')
+                self.toolButton_choose_files.setText('Upload files...')
+                self.toolButton_save_as.setText('Save as...')
+                self.plainTextEdit_filename.setPlaceholderText('Save location')
+                self.checkBox_open_file.setText('Open file after merge')
+                self.checkBox_delete_old.setText('Delete old files')
+                self.pushButton_merge.setText('Merge')
+                self.toolButton_clear_field.setToolTip('Clear upload field')
+                # QFileDialog
+                self.files_filename_window = 'PDF files (*.pdf)'
+                # Messageboxes
+        # MacOS and Linux
         else:
-            # Buttons and fields EN
-            self.plainTextEdit_source_files.setPlaceholderText('PDF files')
-            self.toolButton_choose_files.setText('Upload files...')
-            self.toolButton_save_as.setText('Save as...')
-            self.plainTextEdit_filename.setPlaceholderText('Save location')
-            self.checkBox_open_file.setText('Open file after merge')
-            self.checkBox_delete_old.setText('Delete old files')
-            self.pushButton_merge.setText('Merge')
-            self.toolButton_clear_field.setToolTip('Clear upload field')
-            # QFileDialog
-            self.upload_files_window = 'Upload PDF files'
-            self.save_files_window = 'Save PDF file as...'
-            self.filename_window = 'PDF files (*.pdf)'
+            self.loc = locale.getlocale()  # get current locale
+            logging.info('System language: {}'.format(self.loc))
+            if "nl_NL" in self.loc:
+                # Buttons and fields NL (Only windows)
+                self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
+                self.toolButton_choose_files.setText('Bestanden uploaden...')
+                self.toolButton_save_as.setText('Opslaan als...')
+                self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
+                self.checkBox_open_file.setText('Open het bestand na het samenvoegen')
+                self.checkBox_delete_old.setText('Verwijder oude bestanden')
+                self.pushButton_merge.setText('Samenvoegen')
+                self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
+                # QFileDialog
+                self.files_filename_window = 'PDF bestanden (*.pdf)'
+                # Messageboxes
+            else:
+                # Buttons and fields EN
+                self.plainTextEdit_source_files.setPlaceholderText('PDF files')
+                self.toolButton_choose_files.setText('Upload files...')
+                self.toolButton_save_as.setText('Save as...')
+                self.plainTextEdit_filename.setPlaceholderText('Save location')
+                self.checkBox_open_file.setText('Open file after merge')
+                self.checkBox_delete_old.setText('Delete old files')
+                self.pushButton_merge.setText('Merge')
+                self.toolButton_clear_field.setToolTip('Clear upload field')
+                # QFileDialog
+                self.files_filename_window = 'PDF files (*.pdf)'
+                # Messageboxes
 
     # Functions
     def choose_files(self):
         options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, self.upload_files_window, start_location,
-                                                self.filename_window, options=options)
+        files, _ = QFileDialog.getOpenFileNames(self, " ", start_location,
+                                                self.files_filename_window, options=options)
 
         # File selector
         for i in range(len(files)):
@@ -151,8 +179,8 @@ class MainPage(QtWidgets.QMainWindow):
     def save_as(self):
         options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getSaveFileName(self, self.save_files_window, start_location,
-                                                self.filename_window, options=options)
+        files, _ = QFileDialog.getSaveFileName(self, " ", start_location,
+                                                self.files_filename_window, options=options)
 
         if files:
             file, extension = os.path.splitext(files)
@@ -212,10 +240,17 @@ class MainPage(QtWidgets.QMainWindow):
         # Open the new file
         if self.checkBox_open_file.isChecked():
             try:
-                # TODO Nakijken of dit ook werkt op MacOS en Linux. Als dit werkt webbrowser verwijderen
-                os.startfile(save_location)
-                # webbrowser.open_new(r'{}'.format(save_location))
-                logging.info('Open file after merge')
+                # Check OS and open PDF in default PDF reader
+                if "Windows" in what_os:
+                    os.startfile(save_location)
+                    logging.info('Open file after merge (Windows)')
+                else:
+                    opener = "open" if sys.platform == "darwin" else "xdg-open"
+                    subprocess.call([opener, save_location])
+                    if opener == "open":
+                        logging.info('Open file after merge (MacOS)')
+                    else:
+                        logging.info('Open file after merge (Linux)')
             except Exception:
                 self.warningbox('Het nieuwe bestand is aangemaakt maar kon niet geopend worden.')
                 logging.error('{} Can not be opened'.format(save_location))
