@@ -9,9 +9,11 @@
 - [x] Blokkeer de samenvoeg knop totdat alle velden ingevoerd zijn
 - [x] Controle op invoer nieuwe bestandsnaam
 - [x] Checkbox verwijderen oude bestanden koppelen
+- [x] Functie maken voor het samenvoegen van de PDF bestanden
+- [x] De samenvoegknop de functie laten uitvoeren
+- [x] Het nieuwe bestand openen na samenvoegenmiddels checkbox
+- [ ] Executable maken
+- [ ] Release versie 1.0 uitbrengen
 
-- [ ] Functie maken voor het samenvoegen van de PDF bestanden
-- [ ] De samenvoegknop de functie laten uitvoeren
-- [ ] Het nieuwe bestand openen na samenvoegen
 
 
