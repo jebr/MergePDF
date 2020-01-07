@@ -7,3 +7,4 @@ git status
 /build
 /create_executable_W10.spec
 /create_executable_MacOS.spec
+/__pycache__
