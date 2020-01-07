@@ -5,4 +5,5 @@ git status
 /*.DS_Store
 /.user
 /build
-/create_executable.spec
+/create_executable_W10.spec
+/create_executable_MacOS.spec
