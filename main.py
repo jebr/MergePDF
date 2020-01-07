@@ -151,9 +151,8 @@ class MainPage(QtWidgets.QMainWindow):
 
     # Functions
     def choose_files(self):
-        options = QFileDialog.Options()
         files, _ = QFileDialog.getOpenFileNames(self, " ", start_location,
-                                                self.files_filename_window, options=options)
+                                                self.files_filename_window)
 
         # File selector
         for i in range(len(files)):
@@ -176,9 +175,8 @@ class MainPage(QtWidgets.QMainWindow):
 
     # Save merged file
     def save_as(self):
-        options = QFileDialog.Options()
         files, _ = QFileDialog.getSaveFileName(self, " ", start_location,
-                                                self.files_filename_window, options=options)
+                                                self.files_filename_window)
 
         if files:
             file, extension = os.path.splitext(files)
