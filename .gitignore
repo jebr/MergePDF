@@ -5,3 +5,4 @@ git status
 /*.DS_Store
 /.user
 /build
+/create_executable.spec
