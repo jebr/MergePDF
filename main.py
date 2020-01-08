@@ -37,14 +37,10 @@ what_os = platform.system()
 if 'Windows' in what_os:
     username = os.environ.get('USERNAME')
     start_location = 'c:\\Users\\{}\\Documents'.format(username)
-    # TODO verwijderen voor release
-    # start_location = os.getcwd()  # Development setting
     logging.info('OS: Windows')
 else:
     username = os.environ.get('USER')
     start_location = '/Users/{}/Documents'.format(username)
-    # TODO verwijderen voor release
-    # start_location = os.getcwd()  # Development setting
     logging.info('OS: MacOS or Linux')
 
 
@@ -157,6 +153,11 @@ class MainPage(QtWidgets.QMainWindow):
                 # QFileDialog
                 self.files_filename_window = 'PDF bestanden (*.pdf)'
                 # Messageboxes
+                self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 10 bestanden samen te voegen'
+                self.extension_fail = 'Deze extensie is niet toegestaan'
+                self.little_docs = 'Upload minimaal 2 PDF documenten'
+                self.no_save_loc = 'Bepaal de locatie voor het opslaan'
+                self.cant_open__file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
             else:
                 # Buttons and fields EN (MacOS/Linux)
                 self.plainTextEdit_source_files.setPlaceholderText('PDF files')
@@ -170,6 +171,11 @@ class MainPage(QtWidgets.QMainWindow):
                 # QFileDialog
                 self.files_filename_window = 'PDF files (*.pdf)'
                 # Messageboxes
+                self.max_files = 'Maximum reached!\nIt\'s not possible to upload more than 10 files'
+                self.extension_fail = 'Extension not allowed'
+                self.little_docs = 'Upload at least 2 PDF files'
+                self.no_save_loc = 'Determine the location for saving'
+                self.cant_open__file = 'The new file has been created but could not be opened.'
 
     # Functions
     def choose_files(self):
