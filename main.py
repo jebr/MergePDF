@@ -7,17 +7,26 @@ import ctypes
 import locale
 import subprocess
 
-from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
-    QTableWidgetItem, QWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtGui import QIcon, QPixmap,  QFont
+from PyQt5.QtGui import QPixmap,  QFont
 
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
 except Exception:
     pass
+
+
+def resource_path(relative_path):
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.environ.get("_MEIPASS2", os.path.abspath("."))
+    return os.path.join(base_path, relative_path)
+
 
 # Set logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,15 +36,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 what_os = platform.system()
 if 'Windows' in what_os:
     username = os.environ.get('USERNAME')
-    # start_location = 'c:\\Users\\{}\\Documents'.format(username)
+    start_location = 'c:\\Users\\{}\\Documents'.format(username)
     # TODO verwijderen voor release
-    start_location = os.getcwd()  # Development setting
+    # start_location = os.getcwd()  # Development setting
     logging.info('OS: Windows')
 else:
     username = os.environ.get('USER')
-    # start_location = '/Users/{}/Documents'.format(username)
+    start_location = '/Users/{}/Documents'.format(username)
     # TODO verwijderen voor release
-    start_location = os.getcwd()  # Development setting
+    # start_location = os.getcwd()  # Development setting
     logging.info('OS: MacOS or Linux')
 
 
@@ -44,17 +53,17 @@ class MainPage(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         # Load Main UI
-        loadUi('./ui_files/main_window.ui', self)
+        loadUi(resource_path('ui_files/main_window.ui'), self)
         # Set Size Application
         self.setFixedSize(640, 480)
         # Set Application Icon
-        self.setWindowIcon(QtGui.QIcon('./assets/merge-logo.svg'))
+        self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
 
         # Logo
         # label_logo
         self.label_logo = QLabel(self)
         self.label_logo.setGeometry(50, 40, 50, 50)
-        pixmap = QPixmap('./assets/merge-logo.svg')
+        pixmap = QPixmap(resource_path('assets/merge-logo.svg'))
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
 
@@ -71,7 +80,7 @@ class MainPage(QtWidgets.QMainWindow):
 
         # Clear field button
         # toolButton_clear_field
-        self.toolButton_clear_field.setIcon(QtGui.QIcon('./assets/delete.ico'))
+        self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
         self.toolButton_clear_field.clicked.connect(self.clear_field)
 
         # Save-as button
@@ -174,6 +183,7 @@ class MainPage(QtWidgets.QMainWindow):
                 self.files_total.append(files[i])
             else:
                 self.toolButton_choose_files.setEnabled(False)
+                logging.error('More than 10 files uploaded')
                 self.criticalbox(self.max_files)
 
         logging.info('Items in  files_total: {}'.format(len(self.files_total)))
