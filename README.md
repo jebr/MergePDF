@@ -1,3 +1,4 @@
+<img src="https://github.com/jebr/MergePDF/blob/master/assets/merge-logo.png" width="50" height="50"></img>
 
 # MergePDF
 
