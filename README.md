@@ -8,4 +8,4 @@ Combineer meerdere PDF bestanden tot één PDF bestand
 [![Supported OS](https://img.shields.io/badge/OS-Windows%2FMacOS-orange)](https://github.com/jebr/MergePDF) &nbsp; &nbsp; 
 [![GitHub All Releases](https://img.shields.io/github/downloads/jebr/MergePDF/total?style=social)](https://github.com/jebr/MergePDF/releases)
 
-![Screenshot](assets/screenshot-MergePDF.png?raw=true "Merge PDF  image")
+[![Screenshot](assets/screenshot-MergePDF.png?raw=true "Merge PDF  image")](https://github.com/jebr/MergePDF/releases)
