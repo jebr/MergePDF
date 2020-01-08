@@ -6,8 +6,6 @@ git status
 /.user
 /build
 /dist/
-/create_executable_W10.spec
-/create_executable_MacOS.spec
 /__pycache__
 main.spec
 /example_data
