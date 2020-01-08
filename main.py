@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap,  QFont
 
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
@@ -57,6 +57,9 @@ class MainPage(QtWidgets.QMainWindow):
         pixmap = QPixmap('./assets/merge-logo.svg')
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
+
+        # Font
+        self.setFont(QFont('Arial', 20))
 
         # Source files field
         # plainTextEdit_source_files
@@ -105,8 +108,13 @@ class MainPage(QtWidgets.QMainWindow):
                 # QFileDialog
                 self.files_filename_window = 'PDF bestanden (*.pdf)'
                 # Messageboxes
+                self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 10 bestanden samen te voegen'
+                self.extension_fail = 'Deze extensie is niet toegestaan'
+                self.little_docs = 'Upload minimaal 2 PDF documenten'
+                self.no_save_loc = 'Bepaal de locatie voor het opslaan'
+                self.cant_open__file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
             else:
-                # Buttons and fields EN
+                # Buttons and fields EN (Only windows)
                 self.plainTextEdit_source_files.setPlaceholderText('PDF files')
                 self.toolButton_choose_files.setText('Upload files...')
                 self.toolButton_save_as.setText('Save as...')
@@ -118,12 +126,17 @@ class MainPage(QtWidgets.QMainWindow):
                 # QFileDialog
                 self.files_filename_window = 'PDF files (*.pdf)'
                 # Messageboxes
+                self.max_files = 'Maximum reached!\nIt\'s not possible to upload more than 10 files'
+                self.extension_fail = 'Extension not allowed'
+                self.little_docs = 'Upload at least 2 PDF files'
+                self.no_save_loc = 'Determine the location for saving'
+                self.cant_open__file = 'The new file has been created but could not be opened.'
         # MacOS and Linux
         else:
             self.loc = locale.getlocale()  # get current locale
             logging.info('System language: {}'.format(self.loc))
             if "nl_NL" in self.loc:
-                # Buttons and fields NL (Only windows)
+                # Buttons and fields NL (MacOS/Linux)
                 self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
                 self.toolButton_choose_files.setText('Bestanden uploaden...')
                 self.toolButton_save_as.setText('Opslaan als...')
@@ -136,7 +149,7 @@ class MainPage(QtWidgets.QMainWindow):
                 self.files_filename_window = 'PDF bestanden (*.pdf)'
                 # Messageboxes
             else:
-                # Buttons and fields EN
+                # Buttons and fields EN (MacOS/Linux)
                 self.plainTextEdit_source_files.setPlaceholderText('PDF files')
                 self.toolButton_choose_files.setText('Upload files...')
                 self.toolButton_save_as.setText('Save as...')
@@ -156,13 +169,12 @@ class MainPage(QtWidgets.QMainWindow):
 
         # File selector
         for i in range(len(files)):
-            if len(self.files_total) < 5:
+            if len(self.files_total) < 10:
                 self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
                 self.files_total.append(files[i])
             else:
                 self.toolButton_choose_files.setEnabled(False)
-                self.criticalbox('Maximum bereikt!\nVoor het uploaden van meer bestanden koop de '
-                                 'pro versie\nhttps://snipbasic.com/')
+                self.criticalbox(self.max_files)
 
         logging.info('Items in  files_total: {}'.format(len(self.files_total)))
 
@@ -185,7 +197,7 @@ class MainPage(QtWidgets.QMainWindow):
                     self.plainTextEdit_filename.setPlainText(files)
                     logging.info('Save file as: {}'.format(files))
                 else:
-                    self.warningbox('\nDe extensie {} is niet toegestaan'.format(extension))
+                    self.warningbox(self.extension_fail + ' (' + extension + ')')
                     logging.error('Save file as: {} is not allowed'.format(extension))
             else:
                 self.plainTextEdit_filename.setPlainText(files + '.pdf')
@@ -198,11 +210,11 @@ class MainPage(QtWidgets.QMainWindow):
         # Checks
         if len(self.files_total) < 2:
             logging.error('Less than 2 documents')
-            self.warningbox('Upload minimaal 2 PDF documenten')  # Less than 2 documents
+            self.warningbox(self.little_docs)  # Less than 2 documents
             return
         if not save_location:
             logging.error('No save location set')
-            self.warningbox('Bepaal de locatie voor het opslaan')  # No save location
+            self.warningbox(self.no_save_loc)  # No save location
             return
 
         writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
@@ -248,7 +260,7 @@ class MainPage(QtWidgets.QMainWindow):
                     else:
                         logging.info('Open file after merge (Linux)')
             except Exception:
-                self.warningbox('Het nieuwe bestand is aangemaakt maar kon niet geopend worden.')
+                self.warningbox(self.cant_open__file)
                 logging.error('{} Can not be opened'.format(save_location))
 
         # Reset input fields
