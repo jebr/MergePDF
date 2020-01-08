@@ -5,7 +5,7 @@ git status
 /*.DS_Store
 /.user
 /build
-/dist
+/dist/
 /create_executable_W10.spec
 /create_executable_MacOS.spec
 /__pycache__
