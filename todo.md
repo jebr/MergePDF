@@ -12,10 +12,10 @@
 - [x] Functie maken voor het samenvoegen van de PDF bestanden
 - [x] De samenvoegknop de functie laten uitvoeren
 - [x] Het nieuwe bestand openen na samenvoegenmiddels checkbox
-- [ ] Messageboxen vertalen
-- [ ] Functie maken voor vertaal module (if "nl": lang=NL, velden en knoppen koppelen aan nieuwe variabelen)
-- [ ] Executable maken
-- [ ] Release versie 1.0 uitbrengen
+- [x] Messageboxen vertalen
+- [x] Functie maken voor vertaal module (if "nl": lang=NL, velden en knoppen koppelen aan nieuwe variabelen)
+- [x] Executable maken
+- [x] Release versie 1.0 uitbrengen
 
 
 
