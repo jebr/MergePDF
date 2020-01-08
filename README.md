@@ -1,7 +1,7 @@
 
 # MergePDF
 
-Merge multiple PDF files to a single PDF file
+Combineer meerdere PDF bestanden tot één PDF bestand
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django)
 
