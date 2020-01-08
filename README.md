@@ -6,12 +6,6 @@ Combineer meerdere PDF bestanden tot één PDF bestand
 
 [![Python Version](https://img.shields.io/badge/Python-3.7-blue)](https://github.com/jebr/MergePDF) &nbsp; &nbsp; 
 [![Supported OS](https://img.shields.io/badge/OS-Windows%2FMacOS-orange)](https://github.com/jebr/MergePDF) &nbsp; &nbsp; 
-[![GitHub All Releases](https://img.shields.io/github/downloads/jebr/MergePDF/total?style=plastic)](https://github.com/jebr/MergePDF/releases)
- 
- [![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
-
-[Download](https://github.com/jebr/MergePDF/releases)
-
-
+[![GitHub All Releases](https://img.shields.io/github/downloads/jebr/MergePDF/total?style=social)](https://github.com/jebr/MergePDF/releases)
 
 ![Screenshot](assets/screenshot-MergePDF.png?raw=true "Merge PDF  image")
