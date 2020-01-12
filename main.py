@@ -3,9 +3,9 @@ import os
 import platform
 import logging
 import PyPDF2
-import ctypes
 import locale
 import subprocess
+from send2trash import send2trash
 
 from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox
 
@@ -119,6 +119,9 @@ class MainPage(QtWidgets.QMainWindow):
             self.little_docs = 'Upload minimaal 2 PDF documenten'
             self.no_save_loc = 'Bepaal de locatie voor het opslaan'
             self.cant_open_file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
+            self.directory_not_found = 'De bestanden kunnen niet verwijderd worden, de directory is niet gevonden.'
+            self.merge_completed = 'Het samenvoegen is gelukt!'
+            self.files_to_trash = 'De originele bestanden zijn naar de prullenbak verplaatst'
         else:
             logging.info('Language: English')
             # Buttons and fields EN
@@ -138,6 +141,9 @@ class MainPage(QtWidgets.QMainWindow):
             self.little_docs = 'Upload at least 2 PDF files'
             self.no_save_loc = 'Determine the location for saving'
             self.cant_open_file = 'The new file has been created but could not be opened.'
+            self.directory_not_found = 'Files can\'t be deleted, directory not found.'
+            self.merge_completed = 'File merge completed!'
+            self.files_to_trash = 'The original files are moved to the trashcan'
 
     # Functions
     def choose_files(self):
@@ -213,14 +219,27 @@ class MainPage(QtWidgets.QMainWindow):
             [elem.close() for elem in pdf_file_objs]
 
         logging.info('File merge completed')
+        self.infobox(self.merge_completed)  # Merge completed
 
         if self.checkBox_delete_old.isChecked():
-            logging.info('Checkbox is checked')
+            logging.info('Delete files is checked')
+            # Send files to trash
+            try:
+                for files in range(len(self.files_total)):
+                    logging.info('File moved to trash: {}'.format(self.files_total[files]))
+                    if self.files_total:
+                        send2trash(self.files_total[files])
+                self.infobox(self.files_to_trash)  # Files to trash
+            except OSError:
+                logging.error('Files can\'t be removed. Directory not found!')
+                self.warningbox(self.directory_not_found)  # Directory not found
+
+
             # Delete files
-            for files in range(len(self.files_total)):
-                logging.info('File removed: {}'.format(self.files_total[files]))
-                if self.files_total:
-                    os.unlink(self.files_total[files])
+            # for files in range(len(self.files_total)):
+            #     logging.info('File removed: {}'.format(self.files_total[files]))
+            #     if self.files_total:
+            #         os.unlink(self.files_total[files])
             self.checkBox_delete_old.setChecked(False)  # Reset checkbox
 
         # Open the new file
@@ -238,8 +257,8 @@ class MainPage(QtWidgets.QMainWindow):
                     else:
                         logging.info('Open file after merge (Linux)')
             except Exception:
-                self.warningbox(self.cant_open_file)
                 logging.error('{} Can not be opened'.format(save_location))
+                self.warningbox(self.cant_open_file)
 
         # Reset input fields
         self.plainTextEdit_source_files.clear()
@@ -255,6 +274,9 @@ class MainPage(QtWidgets.QMainWindow):
 
     def warningbox(self, message):
         buttonReply = QMessageBox.warning(self, 'Warning', message, QMessageBox.Close)
+
+    def infobox(self, message):
+        buttonReply = QMessageBox.information(self, 'Info', message, QMessageBox.Close)
 
 
 def main():

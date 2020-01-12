@@ -1,2 +1,3 @@
 PyPDF2
 PyQT5
+Send2Trash
