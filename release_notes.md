@@ -12,9 +12,10 @@
 </br>
 </br>
  
-- Toegevoegd: Activeren en deactiveren van USB-opslagapparaten
-- Wijziging: Menu structuur
-- Wijziging: Hoofdmenu
+- Toegevoegd: : Linux support
+- Verbetering: Taal aanpassingen
+- Wijziging: Verwijderen bestanden na samenvoegen naar prullenbak (Alleen MacOS en Linux)
+- Verbetering: Algemene verbeteringen in de code
 
 ---
 
