@@ -16,5 +16,5 @@ Er kunnen maximaal 20 PDF bestanden per keer samengevoegd worden.
 [![Screenshot](assets/screenshot-MergePDF.png?raw=true "Merge PDF  image")](https://github.com/jebr/MergePDF/releases)
 
 ## Release Notes
-[Realease notes](release-notes.md)
+[Realease notes](https://github.com/jebr/MergePDF/blob/master/release_notes.md)
 
