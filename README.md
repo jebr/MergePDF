@@ -2,7 +2,11 @@
 
 # MergePDF
 
-Combineer meerdere PDF bestanden tot één PDF bestand. Maximaal kunnen 20 PDF bestanden samengevoegd worden.
+Combineer meerdere PDF bestanden tot één PDF bestand. 
+
+Er kunnen maximaal 20 PDF bestanden per keer samengevoegd worden.
+<br/>
+<br/>
 
 [![Python Version](https://img.shields.io/badge/Python-3.7-blue)](https://github.com/jebr/MergePDF) &nbsp; &nbsp; 
 [![Supported OS](https://img.shields.io/badge/OS-Windows%2FMacOs%2FLinux-orange)](https://github.com/jebr/MergePDF) &nbsp; &nbsp;
