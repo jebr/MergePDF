@@ -102,6 +102,7 @@ class MainPage(QtWidgets.QMainWindow):
         self.lang, self.enc = locale.getdefaultlocale()
 
         if 'nl' in self.lang:
+            logging.info('Language: Nederlands')
             self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
             self.toolButton_choose_files.setText('Bestanden uploaden...')
             self.toolButton_save_as.setText('Opslaan als...')
@@ -119,6 +120,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.no_save_loc = 'Bepaal de locatie voor het opslaan'
             self.cant_open_file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
         else:
+            logging.info('Language: English')
             # Buttons and fields EN
             self.plainTextEdit_source_files.setPlaceholderText('PDF files')
             self.toolButton_choose_files.setText('Upload files...')
@@ -152,14 +154,14 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.error('More than 10 files uploaded')
                 self.criticalbox(self.max_files)
 
-        logging.info('Items in  files_total: {}'.format(len(self.files_total)))
+        logging.info('Files uploaded: {}'.format(len(self.files_total)))
 
     # Clear Field
     def clear_field(self):
         self.plainTextEdit_source_files.clear()
         self.files_total = []
         self.toolButton_choose_files.setEnabled(True)
-        logging.info('Items in  files_total: {}'.format(len(self.files_total)))
+        logging.info('Files uploaded: {}'.format(len(self.files_total)))
 
     # Save merged file
     def save_as(self):
