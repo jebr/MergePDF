@@ -122,6 +122,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.directory_not_found = 'De bestanden kunnen niet verwijderd worden, de directory is niet gevonden.'
             self.merge_completed = 'Het samenvoegen is gelukt!'
             self.files_to_trash = 'De originele bestanden zijn naar de prullenbak verplaatst'
+            self.files_deleted = 'De originele bestanden zijn verwijderd'
         else:
             logging.info('Language: English')
             # Buttons and fields EN
@@ -143,7 +144,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.cant_open_file = 'The new file has been created but could not be opened.'
             self.directory_not_found = 'Files can\'t be deleted, directory not found.'
             self.merge_completed = 'File merge completed!'
-            self.files_to_trash = 'The original files are moved to the trashcan'
+            self.files_to_trash = 'The original files are moved to the recycle bin'
+            self.files_deleted = 'The original files are deleted'
 
     # Functions
     def choose_files(self):
@@ -223,23 +225,26 @@ class MainPage(QtWidgets.QMainWindow):
 
         if self.checkBox_delete_old.isChecked():
             logging.info('Delete files is checked')
-            # Send files to trash
-            try:
+            # Send files to trash (MacOS)
+            if 'Windows' in what_os:
+                # Delete files Windows
                 for files in range(len(self.files_total)):
-                    logging.info('File moved to trash: {}'.format(self.files_total[files]))
+                    logging.info('File removed: {}'.format(self.files_total[files]))
                     if self.files_total:
-                        send2trash(self.files_total[files])
-                self.infobox(self.files_to_trash)  # Files to trash
-            except OSError:
-                logging.error('Files can\'t be removed. Directory not found!')
-                self.warningbox(self.directory_not_found)  # Directory not found
+                        os.unlink(self.files_total[files])
+                self.infobox(self.files_deleted)  # Files to trash
+            else:
+                # Delete files MacOS and Linux
+                try:
+                    for files in range(len(self.files_total)):
+                        logging.info('File moved to trash: {}'.format(self.files_total[files]))
+                        if self.files_total:
+                            send2trash(self.files_total[files])
+                    self.infobox(self.files_to_trash)  # Files to trash
+                except OSError:
+                    logging.error('Files can\'t be removed. Directory not found!')
+                    self.warningbox(self.directory_not_found)  # Directory not found
 
-
-            # Delete files
-            # for files in range(len(self.files_total)):
-            #     logging.info('File removed: {}'.format(self.files_total[files]))
-            #     if self.files_total:
-            #         os.unlink(self.files_total[files])
             self.checkBox_delete_old.setChecked(False)  # Reset checkbox
 
         # Open the new file
