@@ -114,7 +114,7 @@ class MainPage(QtWidgets.QMainWindow):
             # QFileDialog
             self.files_filename_window = 'PDF bestanden (*.pdf)'
             # Messageboxes
-            self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 10 bestanden samen te voegen'
+            self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 20 bestanden samen te voegen'
             self.extension_fail = 'Deze extensie is niet toegestaan'
             self.little_docs = 'Upload minimaal 2 PDF documenten'
             self.no_save_loc = 'Bepaal de locatie voor het opslaan'
@@ -133,7 +133,7 @@ class MainPage(QtWidgets.QMainWindow):
             # QFileDialog
             self.files_filename_window = 'PDF files (*.pdf)'
             # Messageboxes
-            self.max_files = 'Maximum reached!\nIt\'s not possible to upload more than 10 files'
+            self.max_files = 'Maximum reached!\nIt\'s not possible to upload more than 20 files'
             self.extension_fail = 'Extension not allowed'
             self.little_docs = 'Upload at least 2 PDF files'
             self.no_save_loc = 'Determine the location for saving'
@@ -146,12 +146,12 @@ class MainPage(QtWidgets.QMainWindow):
 
         # File selector
         for i in range(len(files)):
-            if len(self.files_total) < 10:
+            if len(self.files_total) < 20:
                 self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
                 self.files_total.append(files[i])
             else:
                 self.toolButton_choose_files.setEnabled(False)
-                logging.error('More than 10 files uploaded')
+                logging.error('More than 20 files uploaded')
                 self.criticalbox(self.max_files)
 
         logging.info('Files uploaded: {}'.format(len(self.files_total)))
