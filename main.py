@@ -38,10 +38,14 @@ if 'Windows' in what_os:
     username = os.environ.get('USERNAME')
     start_location = 'c:\\Users\\{}\\Documents'.format(username)
     logging.info('OS: Windows')
+elif 'Linux' in what_os:
+    username = os.environ.get('USER')
+    start_location = '/home/{}/Documents'.format(username)
+    logging.info('OS: Linux')
 else:
     username = os.environ.get('USER')
     start_location = '/Users/{}/Documents'.format(username)
-    logging.info('OS: MacOS or Linux')
+    logging.info('OS: MacOS')
 
 
 # PyQT GUI
