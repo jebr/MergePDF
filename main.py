@@ -99,87 +99,42 @@ class MainPage(QtWidgets.QMainWindow):
         self.new_file_content = []  # List of new file content
 
         # Taal instellingen
-        if 'Windows' in what_os:
-            windll = ctypes.windll.kernel32
-            windll.GetUserDefaultUILanguage()
-            self.os_language = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-            logging.info('System language: {}'.format(self.os_language))
-            if "nl" in self.os_language:
-                # Buttons and fields NL (Only windows)
-                self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
-                self.toolButton_choose_files.setText('Bestanden uploaden...')
-                self.toolButton_save_as.setText('Opslaan als...')
-                self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
-                self.checkBox_open_file.setText('Open het bestand na het samenvoegen')
-                self.checkBox_delete_old.setText('Verwijder oude bestanden')
-                self.pushButton_merge.setText('Samenvoegen')
-                self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
-                # QFileDialog
-                self.files_filename_window = 'PDF bestanden (*.pdf)'
-                # Messageboxes
-                self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 10 bestanden samen te voegen'
-                self.extension_fail = 'Deze extensie is niet toegestaan'
-                self.little_docs = 'Upload minimaal 2 PDF documenten'
-                self.no_save_loc = 'Bepaal de locatie voor het opslaan'
-                self.cant_open__file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
-            else:
-                # Buttons and fields EN (Only windows)
-                self.plainTextEdit_source_files.setPlaceholderText('PDF files')
-                self.toolButton_choose_files.setText('Upload files...')
-                self.toolButton_save_as.setText('Save as...')
-                self.plainTextEdit_filename.setPlaceholderText('Save location')
-                self.checkBox_open_file.setText('Open file after merge')
-                self.checkBox_delete_old.setText('Delete old files')
-                self.pushButton_merge.setText('Merge')
-                self.toolButton_clear_field.setToolTip('Clear upload field')
-                # QFileDialog
-                self.files_filename_window = 'PDF files (*.pdf)'
-                # Messageboxes
-                self.max_files = 'Maximum reached!\nIt\'s not possible to upload more than 10 files'
-                self.extension_fail = 'Extension not allowed'
-                self.little_docs = 'Upload at least 2 PDF files'
-                self.no_save_loc = 'Determine the location for saving'
-                self.cant_open__file = 'The new file has been created but could not be opened.'
-        # MacOS and Linux
+        self.lang, self.enc = locale.getdefaultlocale()
+        if 'nl' in self.lang:
+            self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
+            self.toolButton_choose_files.setText('Bestanden uploaden...')
+            self.toolButton_save_as.setText('Opslaan als...')
+            self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
+            self.checkBox_open_file.setText('Open het bestand na het samenvoegen')
+            self.checkBox_delete_old.setText('Verwijder oude bestanden')
+            self.pushButton_merge.setText('Samenvoegen')
+            self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
+            # QFileDialog
+            self.files_filename_window = 'PDF bestanden (*.pdf)'
+            # Messageboxes
+            self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 10 bestanden samen te voegen'
+            self.extension_fail = 'Deze extensie is niet toegestaan'
+            self.little_docs = 'Upload minimaal 2 PDF documenten'
+            self.no_save_loc = 'Bepaal de locatie voor het opslaan'
+            self.cant_open__file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
         else:
-            self.loc = locale.getlocale()  # get current locale
-            logging.info('System language: {}'.format(self.loc))
-            if "nl_NL" in self.loc:
-                # Buttons and fields NL (MacOS/Linux)
-                self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
-                self.toolButton_choose_files.setText('Bestanden uploaden...')
-                self.toolButton_save_as.setText('Opslaan als...')
-                self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
-                self.checkBox_open_file.setText('Open het bestand na het samenvoegen')
-                self.checkBox_delete_old.setText('Verwijder oude bestanden')
-                self.pushButton_merge.setText('Samenvoegen')
-                self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
-                # QFileDialog
-                self.files_filename_window = 'PDF bestanden (*.pdf)'
-                # Messageboxes
-                self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 10 bestanden samen te voegen'
-                self.extension_fail = 'Deze extensie is niet toegestaan'
-                self.little_docs = 'Upload minimaal 2 PDF documenten'
-                self.no_save_loc = 'Bepaal de locatie voor het opslaan'
-                self.cant_open__file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
-            else:
-                # Buttons and fields EN (MacOS/Linux)
-                self.plainTextEdit_source_files.setPlaceholderText('PDF files')
-                self.toolButton_choose_files.setText('Upload files...')
-                self.toolButton_save_as.setText('Save as...')
-                self.plainTextEdit_filename.setPlaceholderText('Save location')
-                self.checkBox_open_file.setText('Open file after merge')
-                self.checkBox_delete_old.setText('Delete old files')
-                self.pushButton_merge.setText('Merge')
-                self.toolButton_clear_field.setToolTip('Clear upload field')
-                # QFileDialog
-                self.files_filename_window = 'PDF files (*.pdf)'
-                # Messageboxes
-                self.max_files = 'Maximum reached!\nIt\'s not possible to upload more than 10 files'
-                self.extension_fail = 'Extension not allowed'
-                self.little_docs = 'Upload at least 2 PDF files'
-                self.no_save_loc = 'Determine the location for saving'
-                self.cant_open__file = 'The new file has been created but could not be opened.'
+            # Buttons and fields EN
+            self.plainTextEdit_source_files.setPlaceholderText('PDF files')
+            self.toolButton_choose_files.setText('Upload files...')
+            self.toolButton_save_as.setText('Save as...')
+            self.plainTextEdit_filename.setPlaceholderText('Save location')
+            self.checkBox_open_file.setText('Open file after merge')
+            self.checkBox_delete_old.setText('Delete old files')
+            self.pushButton_merge.setText('Merge')
+            self.toolButton_clear_field.setToolTip('Clear upload field')
+            # QFileDialog
+            self.files_filename_window = 'PDF files (*.pdf)'
+            # Messageboxes
+            self.max_files = 'Maximum reached!\nIt\'s not possible to upload more than 10 files'
+            self.extension_fail = 'Extension not allowed'
+            self.little_docs = 'Upload at least 2 PDF files'
+            self.no_save_loc = 'Determine the location for saving'
+            self.cant_open__file = 'The new file has been created but could not be opened.'
 
     # Functions
     def choose_files(self):
