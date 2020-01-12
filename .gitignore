@@ -4,8 +4,8 @@ git status
 /*.cmake
 /*.DS_Store
 /.user
-/build
+/build/
 /dist/
 /__pycache__
 main.spec
-/example_data
+/example_data/
