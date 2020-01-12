@@ -100,6 +100,7 @@ class MainPage(QtWidgets.QMainWindow):
 
         # Taal instellingen
         self.lang, self.enc = locale.getdefaultlocale()
+
         if 'nl' in self.lang:
             self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
             self.toolButton_choose_files.setText('Bestanden uploaden...')
@@ -116,7 +117,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.extension_fail = 'Deze extensie is niet toegestaan'
             self.little_docs = 'Upload minimaal 2 PDF documenten'
             self.no_save_loc = 'Bepaal de locatie voor het opslaan'
-            self.cant_open__file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
+            self.cant_open_file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
         else:
             # Buttons and fields EN
             self.plainTextEdit_source_files.setPlaceholderText('PDF files')
@@ -134,7 +135,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.extension_fail = 'Extension not allowed'
             self.little_docs = 'Upload at least 2 PDF files'
             self.no_save_loc = 'Determine the location for saving'
-            self.cant_open__file = 'The new file has been created but could not be opened.'
+            self.cant_open_file = 'The new file has been created but could not be opened.'
 
     # Functions
     def choose_files(self):
@@ -235,7 +236,7 @@ class MainPage(QtWidgets.QMainWindow):
                     else:
                         logging.info('Open file after merge (Linux)')
             except Exception:
-                self.warningbox(self.cant_open__file)
+                self.warningbox(self.cant_open_file)
                 logging.error('{} Can not be opened'.format(save_location))
 
         # Reset input fields
