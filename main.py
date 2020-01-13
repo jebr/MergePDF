@@ -126,23 +126,27 @@ class MainPage(QtWidgets.QMainWindow):
         # Version check
         self.current_version = float(1.1)
 
-        urllib3.disable_warnings()
-        self.http = urllib3.PoolManager()
-        self.response = self.http.request('GET', 'https://raw.githubusercontent.com/jebr/MergePDF/master/version.txt')
-        self.data = self.response.data.decode('utf-8')
+        try:
+            timeout = urllib3.Timeout(connect=2.0, read=7.0)
+            self.http = urllib3.PoolManager(timeout=timeout)
+            self.response = self.http.request('GET', 'https://raw.githubusercontent.com/jebr/MergePDF/master/version.txt')
+            self.data = self.response.data.decode('utf-8')
 
-        self.new_version = float(self.data)
+            self.new_version = float(self.data)
 
-        if self.current_version < self.new_version:
-            logging.info('Current software version: v{}'.format(self.current_version))
-            logging.info('New software version available v{}'.format(self.new_version))
-            logging.info('https://github.com/jebr/MergePDF/releases')
-            self.infobox_update(self.update_available)
-        # self.new_version
-        else:
-            logging.info('Current software version: v{}'.format(self.current_version))
-            logging.info('New software version: v{}'.format(self.new_version))
-            logging.info('Software up-to-date')
+            if self.current_version < self.new_version:
+                logging.info('Current software version: v{}'.format(self.current_version))
+                logging.info('New software version available v{}'.format(self.new_version))
+                logging.info('https://github.com/jebr/MergePDF/releases')
+                self.infobox_update(self.update_available)
+            else:
+                logging.info('Current software version: v{}'.format(self.current_version))
+                logging.info('New software version: v{}'.format(self.new_version))
+                logging.info('Software up-to-date')
+        except urllib3.exceptions.MaxRetryError:
+            logging.error('No internet connection, max retry error')
+        except urllib3.exceptions.ResponseError:
+            logging.error('No internet connection, no response error')
 
         # Select files button
         # toolButton_choose_files
