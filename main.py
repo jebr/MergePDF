@@ -69,8 +69,44 @@ class MainPage(QtWidgets.QMainWindow):
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
 
+        # TODO Pushbutton voor updates afmaken (Grote van het iccontje)
+        # Update button
+        self.pushButton_update.setGeometry(590, 400, 50, 50)
+        self.pushButton_update.setVisible(False)
+        self.pushButton_update.setIcon(QtGui.QIcon(resource_path('assets/warning.svg')))
+
+        def website_update():
+            webbrowser.open('https://github.com/jebr/MergePDF/releases')
+
+        self.pushButton_update.clicked.connect(website_update)
+
         # Font
         self.setFont(QFont('Arial', 20))
+
+        # Select files button
+        # toolButton_choose_files
+        self.toolButton_choose_files.clicked.connect(self.choose_files)
+        self.files_total = []  # List of upload files
+
+        # Clear field button
+        # toolButton_clear_field
+        self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
+        self.toolButton_clear_field.clicked.connect(self.clear_field)
+
+        # Save-as button
+        # toolButton_save_as
+        self.toolButton_save_as.clicked.connect(self.save_as)
+
+        # Filename field
+        # lineEdit_filename
+
+        # Remove old files checkbox
+        # checkBox_delete_old
+
+        # Merge button
+        # pushButton_merge
+        self.pushButton_merge.clicked.connect(self.merge_files)
+        self.new_file_content = []  # List of new file content
 
         # Taal instellingen
         self.lang, self.enc = locale.getdefaultlocale()
@@ -85,6 +121,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.checkBox_delete_old.setText('Verwijder oude bestanden')
             self.pushButton_merge.setText('Samenvoegen')
             self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
+            self.pushButton_update.setToolTip('Er is een update beschikbaar')
             # QFileDialog
             self.files_filename_window = 'PDF bestanden (*.pdf)'
             # Messageboxes
@@ -109,6 +146,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.checkBox_delete_old.setText('Delete old files')
             self.pushButton_merge.setText('Merge')
             self.toolButton_clear_field.setToolTip('Clear upload field')
+            self.pushButton_update.setToolTip('There is an update available')
             # QFileDialog
             self.files_filename_window = 'PDF files (*.pdf)'
             # Messageboxes
@@ -139,6 +177,7 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('New software version available v{}'.format(self.new_version))
                 logging.info('https://github.com/jebr/MergePDF/releases')
                 self.infobox_update(self.update_available)
+                self.pushButton_update.setVisible(True)  # Show update button
             else:
                 logging.info('Current software version: v{}'.format(self.current_version))
                 logging.info('New software version: v{}'.format(self.new_version))
@@ -148,30 +187,6 @@ class MainPage(QtWidgets.QMainWindow):
         except urllib3.exceptions.ResponseError:
             logging.error('No internet connection, no response error')
 
-        # Select files button
-        # toolButton_choose_files
-        self.toolButton_choose_files.clicked.connect(self.choose_files)
-        self.files_total = []  # List of upload files
-
-        # Clear field button
-        # toolButton_clear_field
-        self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
-        self.toolButton_clear_field.clicked.connect(self.clear_field)
-
-        # Save-as button
-        # toolButton_save_as
-        self.toolButton_save_as.clicked.connect(self.save_as)
-
-        # Filename field
-        # lineEdit_filename
-
-        # Remove old files checkbox
-        # checkBox_delete_old
-
-        # Merge button
-        # pushButton_merge
-        self.pushButton_merge.clicked.connect(self.merge_files)
-        self.new_file_content = []  # List of new file content
 
     # Functions
     def choose_files(self):
