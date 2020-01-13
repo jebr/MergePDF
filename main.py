@@ -97,7 +97,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.merge_completed = 'Het samenvoegen is gelukt!'
             self.files_to_trash = 'De originele bestanden zijn naar de prullenbak verplaatst'
             self.files_deleted = 'De originele bestanden zijn verwijderd'
-            self.update_available = 'Er is een update beschikbaar\n Wil je deze downloaden?'
+            self.update_available = 'Er is een update beschikbaar\n Wil je deze nu downloaden?'
         else:
             logging.info('Language: English')
             # Buttons and fields EN
@@ -121,8 +121,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.merge_completed = 'File merge completed!'
             self.files_to_trash = 'The original files are moved to the recycle bin'
             self.files_deleted = 'The original files are deleted'
+            self.update_available = 'There is an update available\n Do you want to download it now?'
 
-        # Todo afronden versie controle
         # Version check
         self.current_version = float(1.1)
 
@@ -134,19 +134,15 @@ class MainPage(QtWidgets.QMainWindow):
         self.new_version = float(self.data)
 
         if self.current_version < self.new_version:
-            logging.info('Current version: v{}'.format(self.current_version))
+            logging.info('Current software version: v{}'.format(self.current_version))
             logging.info('New software version available v{}'.format(self.new_version))
             logging.info('https://github.com/jebr/MergePDF/releases')
             self.infobox_update(self.update_available)
         # self.new_version
         else:
-            logging.info('Current version: v{}'.format(self.current_version))
-            logging.info('New version: v{}'.format(self.new_version))
+            logging.info('Current software version: v{}'.format(self.current_version))
+            logging.info('New software version: v{}'.format(self.new_version))
             logging.info('Software up-to-date')
-
-        self.new_version = " "
-        self.data = " "
-        self.response = " "
 
         # Select files button
         # toolButton_choose_files
