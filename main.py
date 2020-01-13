@@ -132,15 +132,16 @@ class MainPage(QtWidgets.QMainWindow):
         self.data = self.response.data.decode('utf-8')
 
         self.new_version = float(self.data)
-        logging.info('Current version: v{}'.format(self.current_version))
-        logging.info('New version: v{}'.format(self.new_version))
 
-        if self.current_version <= self.new_version:
+        if self.current_version < self.new_version:
+            logging.info('Current version: v{}'.format(self.current_version))
             logging.info('New software version available v{}'.format(self.new_version))
             logging.info('https://github.com/jebr/MergePDF/releases')
             self.infobox_update(self.update_available)
         # self.new_version
         else:
+            logging.info('Current version: v{}'.format(self.current_version))
+            logging.info('New version: v{}'.format(self.new_version))
             logging.info('Software up-to-date')
 
         self.new_version = " "
