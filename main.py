@@ -97,12 +97,6 @@ class MainPage(QtWidgets.QMainWindow):
         # toolButton_save_as
         self.toolButton_save_as.clicked.connect(self.save_as)
 
-        # Filename field
-        # lineEdit_filename
-
-        # Remove old files checkbox
-        # checkBox_delete_old
-
         # Merge button
         # pushButton_merge
         self.pushButton_merge.clicked.connect(self.merge_files)
