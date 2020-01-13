@@ -6,6 +6,8 @@ import PyPDF2
 import locale
 import subprocess
 from send2trash import send2trash
+import urllib3
+import webbrowser
 
 from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox
 
@@ -70,34 +72,6 @@ class MainPage(QtWidgets.QMainWindow):
         # Font
         self.setFont(QFont('Arial', 20))
 
-        # Source files field
-        # plainTextEdit_source_files
-
-        # Select files button
-        # toolButton_choose_files
-        self.toolButton_choose_files.clicked.connect(self.choose_files)
-        self.files_total = []  # List of upload files
-
-        # Clear field button
-        # toolButton_clear_field
-        self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
-        self.toolButton_clear_field.clicked.connect(self.clear_field)
-
-        # Save-as button
-        # toolButton_save_as
-        self.toolButton_save_as.clicked.connect(self.save_as)
-
-        # Filename field
-        # lineEdit_filename
-
-        # Remove old files checkbox
-        # checkBox_delete_old
-
-        # Merge button
-        # pushButton_merge
-        self.pushButton_merge.clicked.connect(self.merge_files)
-        self.new_file_content = []  # List of new file content
-
         # Taal instellingen
         self.lang, self.enc = locale.getdefaultlocale()
 
@@ -123,6 +97,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.merge_completed = 'Het samenvoegen is gelukt!'
             self.files_to_trash = 'De originele bestanden zijn naar de prullenbak verplaatst'
             self.files_deleted = 'De originele bestanden zijn verwijderd'
+            self.update_available = 'Er is een update beschikbaar\n Wil je deze downloaden?'
         else:
             logging.info('Language: English')
             # Buttons and fields EN
@@ -146,6 +121,56 @@ class MainPage(QtWidgets.QMainWindow):
             self.merge_completed = 'File merge completed!'
             self.files_to_trash = 'The original files are moved to the recycle bin'
             self.files_deleted = 'The original files are deleted'
+
+        # Todo afronden versie controle
+        # Version check
+        self.current_version = float(1.1)
+
+        urllib3.disable_warnings()
+        self.http = urllib3.PoolManager()
+        self.response = self.http.request('GET', 'https://raw.githubusercontent.com/jebr/MergePDF/master/version.txt')
+        self.data = self.response.data.decode('utf-8')
+
+        self.new_version = float(self.data)
+        logging.info('Current version: v{}'.format(self.current_version))
+        logging.info('New version: v{}'.format(self.new_version))
+
+        if self.current_version <= self.new_version:
+            logging.info('New software version available v{}'.format(self.new_version))
+            logging.info('https://github.com/jebr/MergePDF/releases')
+            self.infobox_update(self.update_available)
+        # self.new_version
+        else:
+            logging.info('Software up-to-date')
+
+        self.new_version = " "
+        self.data = " "
+        self.response = " "
+
+        # Select files button
+        # toolButton_choose_files
+        self.toolButton_choose_files.clicked.connect(self.choose_files)
+        self.files_total = []  # List of upload files
+
+        # Clear field button
+        # toolButton_clear_field
+        self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
+        self.toolButton_clear_field.clicked.connect(self.clear_field)
+
+        # Save-as button
+        # toolButton_save_as
+        self.toolButton_save_as.clicked.connect(self.save_as)
+
+        # Filename field
+        # lineEdit_filename
+
+        # Remove old files checkbox
+        # checkBox_delete_old
+
+        # Merge button
+        # pushButton_merge
+        self.pushButton_merge.clicked.connect(self.merge_files)
+        self.new_file_content = []  # List of new file content
 
     # Functions
     def choose_files(self):
@@ -283,6 +308,10 @@ class MainPage(QtWidgets.QMainWindow):
     def infobox(self, message):
         buttonReply = QMessageBox.information(self, 'Info', message, QMessageBox.Close)
 
+    def infobox_update(self, message):
+        buttonReply = QMessageBox.information(self, 'Info', message, QMessageBox.Yes, QMessageBox.No)
+        if buttonReply == QMessageBox.Yes:
+            webbrowser.open('https://github.com/jebr/MergePDF/releases')
 
 def main():
     app = QApplication(sys.argv)
