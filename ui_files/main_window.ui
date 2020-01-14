@@ -186,37 +186,6 @@
      <string>Open het bestand na het samenvoegen</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_update">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>570</x>
-      <y>380</y>
-      <width>50</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
-    </property>
-    <property name="autoDefault">
-     <bool>false</bool>
-    </property>
-    <property name="default">
-     <bool>false</bool>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -232,6 +201,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionInfo"/>
+    <addaction name="actionUpdate_software"/>
    </widget>
    <addaction name="menuHelp"/>
   </widget>
@@ -253,6 +223,17 @@
   <action name="actionInfo">
    <property name="text">
     <string>Info</string>
+   </property>
+  </action>
+  <action name="actionUpdate_software">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Update MergePDF</string>
    </property>
   </action>
  </widget>

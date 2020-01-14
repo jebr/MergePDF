@@ -71,12 +71,6 @@ class MainPage(QtWidgets.QMainWindow):
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
 
-        # Update button
-        self.pushButton_update.setVisible(False)
-        self.pushButton_update.setIcon(QtGui.QIcon(resource_path('assets/warning.svg')))
-
-        self.pushButton_update.clicked.connect(self.website_update)
-
         # Select files button
         # toolButton_choose_files
         self.toolButton_choose_files.clicked.connect(self.choose_files)
@@ -109,7 +103,6 @@ class MainPage(QtWidgets.QMainWindow):
             self.checkBox_delete_old.setText('Verwijder oude bestanden')
             self.pushButton_merge.setText('Samenvoegen')
             self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
-            self.pushButton_update.setToolTip('Er is een update beschikbaar')
             # QFileDialog
             self.files_filename_window = 'PDF bestanden (*.pdf)'
             # Messageboxes
@@ -134,7 +127,6 @@ class MainPage(QtWidgets.QMainWindow):
             self.checkBox_delete_old.setText('Delete old files')
             self.pushButton_merge.setText('Merge')
             self.toolButton_clear_field.setToolTip('Clear upload field')
-            self.pushButton_update.setToolTip('There is an update available')
             # QFileDialog
             self.files_filename_window = 'PDF files (*.pdf)'
             # Messageboxes
@@ -155,6 +147,9 @@ class MainPage(QtWidgets.QMainWindow):
         # Initial update check
         self.check_update()
 
+        # Update button
+        self.actionUpdate_software.triggered.connect(self.website_update)
+
     def website_update(self):
         webbrowser.open('https://github.com/jebr/MergePDF/releases')
 
@@ -173,13 +168,14 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('New software version available v{}'.format(new_version))
                 logging.info('https://github.com/jebr/MergePDF/releases')
                 self.infobox_update(self.update_available)
-                self.pushButton_update.setVisible(True)  # Show update button
                 self.statusBar().showMessage('New software version available v{}'.format(new_version))
+                self.actionUpdate_software.setEnabled(True)
             else:
                 logging.info('Current software version: v{}'.format(current_version))
-                logging.info('Latest release: v{}'.format(self.new_version))
+                logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
-                self.statusBar().showMessage('Software up-to-date', 2000)
+                self.statusBar().showMessage('Software up-to-date v{}'.format(current_version))
+                self.actionUpdate_software.setEnabled(False)
 
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
