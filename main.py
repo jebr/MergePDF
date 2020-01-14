@@ -177,6 +177,7 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
+
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
         except urllib3.exceptions.ResponseError:
@@ -359,7 +360,7 @@ def main():
     app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
-    # check_update()
+    widget.check_update()
     sys.exit(app.exec())
 
 
