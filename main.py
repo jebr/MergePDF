@@ -9,11 +9,13 @@ from send2trash import send2trash
 import urllib3
 import webbrowser
 
-from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtGui import QPixmap,  QFont
+
+current_version = float(1.1)
 
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
@@ -32,7 +34,7 @@ def resource_path(relative_path):
 
 # Set logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-# logging.disable(logging.DEBUG)
+logging.disable(logging.DEBUG)
 
 # What OS is running
 what_os = platform.system()
@@ -69,9 +71,7 @@ class MainPage(QtWidgets.QMainWindow):
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
 
-        # TODO Pushbutton voor updates afmaken (Grote van het iccontje)
         # Update button
-        self.pushButton_update.setGeometry(590, 400, 50, 50)
         self.pushButton_update.setVisible(False)
         self.pushButton_update.setIcon(QtGui.QIcon(resource_path('assets/warning.svg')))
 
@@ -79,9 +79,6 @@ class MainPage(QtWidgets.QMainWindow):
             webbrowser.open('https://github.com/jebr/MergePDF/releases')
 
         self.pushButton_update.clicked.connect(website_update)
-
-        # Font
-        self.setFont(QFont('Arial', 20))
 
         # Select files button
         # toolButton_choose_files
@@ -155,8 +152,12 @@ class MainPage(QtWidgets.QMainWindow):
             self.files_deleted = 'The original files are deleted'
             self.update_available = 'There is an update available\n Do you want to download it now?'
 
+        # Info menu
+        self.actionInfo.triggered.connect(self.open_info_window)
+
+
         # Version check
-        self.current_version = float(1.1)
+        # self.current_version = float(1.1)
 
         try:
             timeout = urllib3.Timeout(connect=2.0, read=7.0)
@@ -166,15 +167,15 @@ class MainPage(QtWidgets.QMainWindow):
 
             self.new_version = float(self.data)
 
-            if self.current_version < self.new_version:
-                logging.info('Current software version: v{}'.format(self.current_version))
+            if current_version < self.new_version:
+                logging.info('Current software version: v{}'.format(current_version))
                 logging.info('New software version available v{}'.format(self.new_version))
                 logging.info('https://github.com/jebr/MergePDF/releases')
                 self.infobox_update(self.update_available)
                 self.pushButton_update.setVisible(True)  # Show update button
             else:
-                logging.info('Current software version: v{}'.format(self.current_version))
-                logging.info('New software version: v{}'.format(self.new_version))
+                logging.info('Current software version: v{}'.format(current_version))
+                logging.info('Latest release: v{}'.format(self.new_version))
                 logging.info('Software up-to-date')
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
@@ -308,6 +309,10 @@ class MainPage(QtWidgets.QMainWindow):
         self.checkBox_open_file.setChecked(False)
         logging.info('Reset all fields completed')
 
+    def open_info_window(self):
+        info_window_ = InfoWindow()
+        info_window_.exec_()
+
     # Messageboxen
     def criticalbox(self, message):
         buttonReply = QMessageBox.critical(self, 'Error', message, QMessageBox.Close)
@@ -322,6 +327,35 @@ class MainPage(QtWidgets.QMainWindow):
         buttonReply = QMessageBox.information(self, 'Info', message, QMessageBox.Yes, QMessageBox.No)
         if buttonReply == QMessageBox.Yes:
             webbrowser.open('https://github.com/jebr/MergePDF/releases')
+
+
+class InfoWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(resource_path('ui_files/info_dialog.ui'), self)
+        self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
+        self.setFixedSize(320, 240)
+
+        # flags = QDialog.setWindowFlags(Qt_WindowFlags=None)
+        # flags = QDialog.WindowContextHelpButtonHint()
+        # self.setWindowFlag(flags)
+
+        # Logo
+        self.label_info_logo.setText("")
+
+        self.label_info_logo = QLabel(self)
+        info_icon = QPixmap(resource_path('assets/merge-logo.svg'))
+        info_icon = info_icon.scaledToWidth(40)
+        self.label_info_logo.setPixmap(info_icon)
+        # self.label_logo.setGeometry(50, 40, 50, 50)
+        self.label_info_logo.move(65, 30)
+
+        self.label_info_title.setText('MergePDF v{}'.format(current_version))
+        self.label_info_copyright.setText('Copyright {} Jeroen Brauns 2020'.format('©'))
+        self.label_info_link.setText('<a href="https:///github.com//jebr//MergePDF">GitHub repository</a>')
+        self.label_info_link.setOpenExternalLinks(True)
+
+
 
 def main():
     app = QApplication(sys.argv)
