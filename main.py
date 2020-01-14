@@ -46,10 +46,12 @@ elif 'Linux' in what_os:
     username = os.environ.get('USER')
     start_location = '/home/{}/Documents'.format(username)
     logging.info('OS: Linux')
-else:
+elif 'Darwin' in what_os:
     username = os.environ.get('USER')
     start_location = '/Users/{}/Documents'.format(username)
     logging.info('OS: MacOS')
+else:
+    exit()
 
 
 # PyQT GUI
