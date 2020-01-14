@@ -348,7 +348,7 @@ class InfoWindow(QDialog):
         info_icon = info_icon.scaledToWidth(40)
         self.label_info_logo.setPixmap(info_icon)
         # self.label_logo.setGeometry(50, 40, 50, 50)
-        self.label_info_logo.move(65, 30)
+        self.label_info_logo.move(50, 30)
 
         self.label_info_title.setText('MergePDF v{}'.format(current_version))
         self.label_info_copyright.setText('Copyright {} Jeroen Brauns 2020'.format('©'))
