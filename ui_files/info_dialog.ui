@@ -84,6 +84,21 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QLabel" name="label_info_dev">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="text">
+       <string>Developers</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>

@@ -180,7 +180,7 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
-                # if
+                # TODO Melding wanneer de button wordt ingedrukt
 
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
@@ -358,6 +358,7 @@ class InfoWindow(QDialog):
         self.label_info_copyright.setText('Copyright {} Jeroen Brauns 2020'.format('©'))
         self.label_info_link.setText('<a href="https://github.com/jebr/MergePDF">GitHub repository</a>')
         self.label_info_link.setOpenExternalLinks(True)
+        self.label_info_dev.setText('Developers\nJeroen Brauns / Niels van den Bos')
 
 
 def main():
