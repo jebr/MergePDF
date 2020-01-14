@@ -12,7 +12,7 @@ import webbrowser
 from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog
 
 from PyQt5.uic import loadUi
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QPixmap,  QFont
 
 current_version = float(1.1)
@@ -154,8 +154,6 @@ class MainPage(QtWidgets.QMainWindow):
 
         # Info menu
         self.actionInfo.triggered.connect(self.open_info_window)
-        # Check update menu
-        self.actionUpdate.triggered.connect(self.check_update)
 
         # Initial update check
         self.check_update()
@@ -180,13 +178,17 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
-                # TODO Melding wanneer de button wordt ingedrukt
+                self_update_available = True
 
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
         except urllib3.exceptions.ResponseError:
             logging.error('No internet connection, no response error')
 
+        # Check update menu
+        self.actionUpdate.triggered.connect(self.check_update)
+        if self_update_available is True:
+            self.infobox_update(self.update_available)  # Show update button
 
 
     # Functions
@@ -337,22 +339,17 @@ class MainPage(QtWidgets.QMainWindow):
 
 class InfoWindow(QDialog):
     def __init__(self):
-        super().__init__()
+        super().__init__(None, QtCore.Qt.WindowCloseButtonHint)
         loadUi(resource_path('ui_files/info_dialog.ui'), self)
         self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
         self.setFixedSize(320, 240)
-
-        # flags = QDialog.setWindowFlags(Qt_WindowFlags=None)
-        # flags = QDialog.WindowContextHelpButtonHint()
-        # self.setWindowFlag(flags)
-
         # Logo
         self.label_info_logo.setText("")
         self.label_info_logo = QLabel(self)
         info_icon = QPixmap(resource_path('assets/merge-logo.svg'))
         info_icon = info_icon.scaledToWidth(40)
         self.label_info_logo.setPixmap(info_icon)
-        self.label_info_logo.move(50, 30)
+        self.label_info_logo.move(50, 25)
         # Labels
         self.label_info_title.setText('MergePDF v{}'.format(current_version))
         self.label_info_copyright.setText('Copyright {} Jeroen Brauns 2020'.format('©'))
@@ -365,7 +362,6 @@ def main():
     app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
-    # widget.check_update()
     sys.exit(app.exec())
 
 
