@@ -103,6 +103,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.checkBox_delete_old.setText('Verwijder oude bestanden')
             self.pushButton_merge.setText('Samenvoegen')
             self.toolButton_clear_field.setToolTip('Leeg het upload  veld')
+            self.statusbar.msg = 'MergePDF version v'
+            self.statusbar_update_msg = 'Nieuwe versie beschikbaar v'
             # QFileDialog
             self.files_filename_window = 'PDF bestanden (*.pdf)'
             # Messageboxes
@@ -127,6 +129,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.checkBox_delete_old.setText('Delete old files')
             self.pushButton_merge.setText('Merge')
             self.toolButton_clear_field.setToolTip('Clear upload field')
+            self.statusbar.msg = 'MergePDF version v'
+            self.statusbar_update_msg = 'New software version available v'
             # QFileDialog
             self.files_filename_window = 'PDF files (*.pdf)'
             # Messageboxes
@@ -168,13 +172,13 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('New software version available v{}'.format(new_version))
                 logging.info('https://github.com/jebr/MergePDF/releases')
                 self.infobox_update(self.update_available)
-                self.statusBar().showMessage('New software version available v{}'.format(new_version))
+                self.statusBar().showMessage(self.statusbar_update_msg + str(new_version))
                 self.actionUpdate_software.setEnabled(True)
             else:
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
-                self.statusBar().showMessage('Software up-to-date v{}'.format(current_version))
+                self.statusBar().showMessage(self.statusbar.msg + str(new_version))
                 self.actionUpdate_software.setEnabled(False)
 
         except urllib3.exceptions.MaxRetryError:
@@ -343,7 +347,8 @@ class InfoWindow(QDialog):
         self.label_info_logo.move(50, 25)
         # Labels
         self.label_info_title.setText('MergePDF v{}'.format(current_version))
-        self.label_info_copyright.setText('Copyright {} Jeroen Brauns 2020'.format('©'))
+        self.label_info_copyright.setText('Copyright {} {} 2020'.format('©', ' <a href="https://switchit.nu">SwitchIT</a'))
+        self.label_info_copyright.setOpenExternalLinks(True)
         self.label_info_link.setText('<a href="https://github.com/jebr/MergePDF">GitHub repository</a>')
         self.label_info_link.setOpenExternalLinks(True)
         self.label_info_dev.setText('Developers\nJeroen Brauns / Niels van den Bos')
