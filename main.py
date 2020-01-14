@@ -157,6 +157,9 @@ class MainPage(QtWidgets.QMainWindow):
         # Check update menu
         self.actionUpdate.triggered.connect(self.check_update)
 
+        # Initial update check
+        self.check_update()
+
     def check_update(self):
         # Version check
         try:
@@ -177,6 +180,7 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
+                # if
 
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
@@ -360,7 +364,7 @@ def main():
     app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
-    widget.check_update()
+    # widget.check_update()
     sys.exit(app.exec())
 
 
