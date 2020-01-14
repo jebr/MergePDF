@@ -352,7 +352,7 @@ class InfoWindow(QDialog):
 
         self.label_info_title.setText('MergePDF v{}'.format(current_version))
         self.label_info_copyright.setText('Copyright {} Jeroen Brauns 2020'.format('©'))
-        self.label_info_link.setText('<a href="https:///github.com//jebr//MergePDF">GitHub repository</a>')
+        self.label_info_link.setText('<a href="https://github.com/jebr/MergePDF">GitHub repository</a>')
         self.label_info_link.setOpenExternalLinks(True)
 
 

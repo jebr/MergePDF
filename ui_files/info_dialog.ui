@@ -40,6 +40,7 @@
      <widget class="QLabel" name="label_info_title">
       <property name="font">
        <font>
+        <family>Arial</family>
         <pointsize>10</pointsize>
         <weight>75</weight>
         <bold>true</bold>
@@ -55,6 +56,11 @@
     </item>
     <item>
      <widget class="QLabel" name="label_info_copyright">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
       <property name="text">
        <string>Copyright</string>
       </property>
@@ -65,6 +71,11 @@
     </item>
     <item>
      <widget class="QLabel" name="label_info_link">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
       <property name="text">
        <string>Link</string>
       </property>
