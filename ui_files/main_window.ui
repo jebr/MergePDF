@@ -232,7 +232,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionInfo"/>
-    <addaction name="actionUpdate_info"/>
+    <addaction name="actionUpdate"/>
    </widget>
    <addaction name="menuHelp"/>
   </widget>
@@ -242,7 +242,7 @@
     <string>Test</string>
    </property>
   </action>
-  <action name="actionUpdate_info">
+  <action name="actionUpdate">
    <property name="text">
     <string>Check for updates</string>
    </property>

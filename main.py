@@ -154,20 +154,20 @@ class MainPage(QtWidgets.QMainWindow):
 
         # Info menu
         self.actionInfo.triggered.connect(self.open_info_window)
+        # Check update menu
+        self.actionUpdate.triggered.connect(self.check_update)
 
-
+    def check_update(self):
         # Version check
-        # self.current_version = float(1.1)
-
         try:
             timeout = urllib3.Timeout(connect=2.0, read=7.0)
-            self.http = urllib3.PoolManager(timeout=timeout)
-            self.response = self.http.request('GET', 'https://raw.githubusercontent.com/jebr/MergePDF/master/version.txt')
-            self.data = self.response.data.decode('utf-8')
+            http = urllib3.PoolManager(timeout=timeout)
+            response = http.request('GET', 'https://raw.githubusercontent.com/jebr/MergePDF/master/version.txt')
+            data = response.data.decode('utf-8')
 
-            self.new_version = float(self.data)
+            new_version = float(data)
 
-            if current_version < self.new_version:
+            if current_version < new_version:
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('New software version available v{}'.format(self.new_version))
                 logging.info('https://github.com/jebr/MergePDF/releases')
@@ -175,12 +175,13 @@ class MainPage(QtWidgets.QMainWindow):
                 self.pushButton_update.setVisible(True)  # Show update button
             else:
                 logging.info('Current software version: v{}'.format(current_version))
-                logging.info('Latest release: v{}'.format(self.new_version))
+                logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
         except urllib3.exceptions.ResponseError:
             logging.error('No internet connection, no response error')
+
 
 
     # Functions
@@ -342,25 +343,23 @@ class InfoWindow(QDialog):
 
         # Logo
         self.label_info_logo.setText("")
-
         self.label_info_logo = QLabel(self)
         info_icon = QPixmap(resource_path('assets/merge-logo.svg'))
         info_icon = info_icon.scaledToWidth(40)
         self.label_info_logo.setPixmap(info_icon)
-        # self.label_logo.setGeometry(50, 40, 50, 50)
         self.label_info_logo.move(50, 30)
-
+        # Labels
         self.label_info_title.setText('MergePDF v{}'.format(current_version))
         self.label_info_copyright.setText('Copyright {} Jeroen Brauns 2020'.format('©'))
         self.label_info_link.setText('<a href="https://github.com/jebr/MergePDF">GitHub repository</a>')
         self.label_info_link.setOpenExternalLinks(True)
 
 
-
 def main():
     app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
+    # check_update()
     sys.exit(app.exec())
 
 
