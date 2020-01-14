@@ -75,10 +75,7 @@ class MainPage(QtWidgets.QMainWindow):
         self.pushButton_update.setVisible(False)
         self.pushButton_update.setIcon(QtGui.QIcon(resource_path('assets/warning.svg')))
 
-        def website_update():
-            webbrowser.open('https://github.com/jebr/MergePDF/releases')
-
-        self.pushButton_update.clicked.connect(website_update)
+        self.pushButton_update.clicked.connect(self.website_update)
 
         # Select files button
         # toolButton_choose_files
@@ -158,6 +155,9 @@ class MainPage(QtWidgets.QMainWindow):
         # Initial update check
         self.check_update()
 
+    def website_update(self):
+        webbrowser.open('https://github.com/jebr/MergePDF/releases')
+
     def check_update(self):
         # Version check
         try:
@@ -170,26 +170,21 @@ class MainPage(QtWidgets.QMainWindow):
 
             if current_version < new_version:
                 logging.info('Current software version: v{}'.format(current_version))
-                logging.info('New software version available v{}'.format(self.new_version))
+                logging.info('New software version available v{}'.format(new_version))
                 logging.info('https://github.com/jebr/MergePDF/releases')
                 self.infobox_update(self.update_available)
                 self.pushButton_update.setVisible(True)  # Show update button
+                self.statusBar().showMessage('New software version available v{}'.format(new_version))
             else:
                 logging.info('Current software version: v{}'.format(current_version))
-                logging.info('Latest release: v{}'.format(new_version))
+                logging.info('Latest release: v{}'.format(self.new_version))
                 logging.info('Software up-to-date')
-                self_update_available = True
+                self.statusBar().showMessage('Software up-to-date', 2000)
 
         except urllib3.exceptions.MaxRetryError:
             logging.error('No internet connection, max retry error')
         except urllib3.exceptions.ResponseError:
             logging.error('No internet connection, no response error')
-
-        # Check update menu
-        self.actionUpdate.triggered.connect(self.check_update)
-        if self_update_available is True:
-            self.infobox_update(self.update_available)  # Show update button
-
 
     # Functions
     def choose_files(self):
