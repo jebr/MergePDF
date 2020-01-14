@@ -15,7 +15,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QPixmap,  QFont
 
-current_version = float(1.1)
+current_version = float(1.2)
 
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
@@ -346,7 +346,10 @@ class InfoWindow(QDialog):
         info_icon = QPixmap(resource_path('assets/merge-logo.svg'))
         info_icon = info_icon.scaledToWidth(40)
         self.label_info_logo.setPixmap(info_icon)
-        self.label_info_logo.move(50, 25)
+        if 'Darwin' in what_os:
+            self.label_info_logo.move(70, 20)
+        else:
+            self.label_info_logo.move(50, 25)
         # Labels
         self.label_info_title.setText('MergePDF v{}'.format(current_version))
         self.label_info_copyright.setText('Copyright {} {} 2020'.format('©', ' <a href="https://switchit.nu">SwitchIT</a'))
