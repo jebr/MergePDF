@@ -10,3 +10,5 @@ git status
 main.spec
 /example_data/
 todo.md
+src
+target
