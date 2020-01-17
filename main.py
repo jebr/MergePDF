@@ -11,7 +11,7 @@ import webbrowser
 
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
-from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog
+from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog, QMainWindow
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -362,8 +362,8 @@ class InfoWindow(QDialog):
 
 
 def main():
-    appctxt = ApplicationContext()
-    app = QApplication(sys.argv)
+    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
+    # app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
     # sys.exit(app.exec())
