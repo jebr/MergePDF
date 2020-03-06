@@ -9,7 +9,7 @@ from send2trash import send2trash
 import urllib3
 import webbrowser
 
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
+# from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog, QMainWindow
 
@@ -362,12 +362,12 @@ class InfoWindow(QDialog):
 
 
 def main():
-    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
-    # app = QApplication(sys.argv)
+    # appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
+    app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
-    # sys.exit(app.exec())
-    exit_code = appctxt.app.exec_()  # 2. Invoke appctxt.app.exec_()
+    sys.exit(app.exec())
+    # exit_code = appctxt.app.exec_()  # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
 
 
