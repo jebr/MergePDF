@@ -8,6 +8,9 @@ import subprocess
 from send2trash import send2trash
 import urllib3
 import webbrowser
+import time
+import tempfile
+from shutil import copyfile
 
 # from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
@@ -158,6 +161,19 @@ class MainPage(QtWidgets.QMainWindow):
         # Update button
         self.actionUpdate_software.triggered.connect(self.website_update)
 
+        self.tempdir = tempfile.gettempdir() + "\\MergePDF"
+        if not os.path.exists(self.tempdir):
+            os.mkdir(self.tempdir)
+
+
+    def backup_files(self, files: list):
+        """Creates an unique dir and backs up files"""
+        backup_dir = f"{self.tempdir}\\{time.time():.0f}"
+        os.mkdir(backup_dir)
+        for file in files:
+            file_name = os.path.basename(file)
+            copyfile(file, f"{backup_dir}\\{file_name}")
+
     def website_update(self):
         webbrowser.open('https://github.com/jebr/MergePDF/releases')
 
@@ -245,6 +261,8 @@ class MainPage(QtWidgets.QMainWindow):
             logging.error('No save location set')
             self.warningbox(self.no_save_loc)  # No save location
             return
+
+        self.backup_files(self.files_total)
 
         writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
 
