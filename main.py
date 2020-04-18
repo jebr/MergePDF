@@ -119,6 +119,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.extension_fail = 'Deze extensie is niet toegestaan'
             self.little_docs = 'Upload minimaal 2 PDF documenten'
             self.no_save_loc = 'Bepaal de locatie voor het opslaan'
+            self.bad_save_loc = 'Ongeldige opslaglocatie'
             self.cant_open_file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
             self.directory_not_found = 'De bestanden kunnen niet verwijderd worden, de directory is niet gevonden.'
             self.merge_completed = 'Het samenvoegen is gelukt!'
@@ -145,6 +146,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.extension_fail = 'Extension not allowed'
             self.little_docs = 'Upload at least 2 PDF files'
             self.no_save_loc = 'Determine the location for saving'
+            self.bad_save_loc = 'Invalid save location'
             self.cant_open_file = 'The new file has been created but could not be opened.'
             self.directory_not_found = 'Files can\'t be deleted, directory not found.'
             self.merge_completed = 'File merge completed!'
@@ -214,12 +216,17 @@ class MainPage(QtWidgets.QMainWindow):
         # File selector
         for i in range(len(files)):
             if len(self.files_total) < 20:
+                print(files[i])
+                print(self.files_total)
+                if files[i] in self.files_total:
+                    continue
                 self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
                 self.files_total.append(files[i])
             else:
                 self.toolButton_choose_files.setEnabled(False)
                 logging.error('More than 20 files uploaded')
                 self.criticalbox(self.max_files)
+                return
 
         logging.info('Files uploaded: {}'.format(len(self.files_total)))
 
@@ -260,6 +267,11 @@ class MainPage(QtWidgets.QMainWindow):
         if not save_location:
             logging.error('No save location set')
             self.warningbox(self.no_save_loc)  # No save location
+            return
+
+        if save_location in self.files_total:
+            logging.error('Bad save location')
+            self.warningbox(self.bad_save_loc)
             return
 
         self.backup_files(self.files_total)
