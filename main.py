@@ -66,14 +66,14 @@ class MainPage(QtWidgets.QMainWindow):
         # Load Main UI
         loadUi(resource_path('ui_files/main_window.ui'), self)
         # Set Size Application
-        self.setFixedSize(640, 480)
+        self.setFixedSize(390, 460)
         # Set Application Icon
         self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
 
         # Logo
         # label_logo
         self.label_logo = QLabel(self)
-        self.label_logo.setGeometry(50, 40, 50, 50)
+        self.label_logo.setGeometry(300, 30, 50, 50)
         pixmap = QPixmap(resource_path('assets/merge-logo.svg'))
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
@@ -102,7 +102,7 @@ class MainPage(QtWidgets.QMainWindow):
 
         if 'nl' in self.lang:
             logging.info('Language: Nederlands')
-            self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
+            #self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
             self.toolButton_choose_files.setText('Bestanden uploaden...')
             self.toolButton_save_as.setText('Opslaan als...')
             self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
@@ -220,7 +220,8 @@ class MainPage(QtWidgets.QMainWindow):
                 print(self.files_total)
                 if files[i] in self.files_total:
                     continue
-                self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
+                # self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
+                self.plainTextEdit_source_files.addItem(os.path.basename(files[i]))
                 self.files_total.append(files[i])
             else:
                 self.toolButton_choose_files.setEnabled(False)
@@ -371,7 +372,7 @@ class InfoWindow(QDialog):
         super().__init__(None, QtCore.Qt.WindowCloseButtonHint)
         loadUi(resource_path('ui_files/info_dialog.ui'), self)
         self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
-        self.setFixedSize(320, 240)
+        self.setFixedSize(220, 240)
         # Logo
         self.label_info_logo.setText("")
         self.label_info_logo = QLabel(self)
