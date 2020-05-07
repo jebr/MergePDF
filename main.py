@@ -66,7 +66,7 @@ class MainPage(QtWidgets.QMainWindow):
         # Load Main UI
         loadUi(resource_path('ui_files/main_window.ui'), self)
         # Set Size Application
-        self.setFixedSize(390, 460)
+        self.setFixedSize(390, 410)
         # Set Application Icon
         self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
 
@@ -88,10 +88,6 @@ class MainPage(QtWidgets.QMainWindow):
         self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
         self.toolButton_clear_field.clicked.connect(self.clear_field)
 
-        # Save-as button
-        # toolButton_save_as
-        self.toolButton_save_as.clicked.connect(self.save_as)
-
         # Merge button
         # pushButton_merge
         self.pushButton_merge.clicked.connect(self.merge_files)
@@ -100,12 +96,11 @@ class MainPage(QtWidgets.QMainWindow):
         # Taal instellingen
         self.lang, self.enc = locale.getdefaultlocale()
 
+        self.last_path = None
+
         if 'nl' in self.lang:
             logging.info('Language: Nederlands')
-            #self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
-            self.toolButton_choose_files.setText('Bestanden uploaden...')
-            self.toolButton_save_as.setText('Opslaan als...')
-            self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
+            self.toolButton_choose_files.setText('Bestanden toevoegen...')
             self.checkBox_open_file.setText('Open het bestand na het samenvoegen')
             self.checkBox_delete_old.setText('Verwijder oude bestanden')
             self.pushButton_merge.setText('Samenvoegen')
@@ -132,7 +127,6 @@ class MainPage(QtWidgets.QMainWindow):
             self.plainTextEdit_source_files.setPlaceholderText('PDF files')
             self.toolButton_choose_files.setText('Upload files...')
             self.toolButton_save_as.setText('Save as...')
-            self.plainTextEdit_filename.setPlaceholderText('Save location')
             self.checkBox_open_file.setText('Open file after merge')
             self.checkBox_delete_old.setText('Delete old files')
             self.pushButton_merge.setText('Merge')
@@ -166,6 +160,12 @@ class MainPage(QtWidgets.QMainWindow):
         self.tempdir = tempfile.gettempdir() + "\\MergePDF"
         if not os.path.exists(self.tempdir):
             os.mkdir(self.tempdir)
+
+    def move_up(self):
+        pass
+
+    def move_down(self):
+        pass
 
 
     def backup_files(self, files: list):
@@ -210,14 +210,17 @@ class MainPage(QtWidgets.QMainWindow):
 
     # Functions
     def choose_files(self):
-        files, _ = QFileDialog.getOpenFileNames(self, " ", start_location,
-                                                self.files_filename_window)
+        if not self.last_path:
+            files, _ = QFileDialog.getOpenFileNames(self, " ", start_location,
+                                                    self.files_filename_window)
+        else:
+            files, _ = QFileDialog.getOpenFileNames(self, " ", self.last_path,
+                                                    self.files_filename_window)            
 
         # File selector
         for i in range(len(files)):
             if len(self.files_total) < 20:
-                print(files[i])
-                print(self.files_total)
+                self.last_path = os.path.dirname(files[i])
                 if files[i] in self.files_total:
                     continue
                 # self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
@@ -239,26 +242,45 @@ class MainPage(QtWidgets.QMainWindow):
         logging.info('Files uploaded: {}'.format(len(self.files_total)))
 
     # Save merged file
-    def save_as(self):
-        files, _ = QFileDialog.getSaveFileName(self, " ", start_location,
-                                                self.files_filename_window)
+    # def save_as(self):
+    #     if self.last_path:
+    #         files, _ = QFileDialog.getSaveFileName(self, " ", self.last_path,
+    #                                                 self.files_filename_window)
+    #     else:
 
-        if files:
-            file, extension = os.path.splitext(files)
-            if extension:  # Check file extension
-                if '.pdf' in extension:
-                    self.plainTextEdit_filename.setPlainText(files)
-                    logging.info('Save file as: {}'.format(files))
-                else:
-                    self.warningbox(self.extension_fail + ' (' + extension + ')')
-                    logging.error('Save file as: {} is not allowed'.format(extension))
-            else:
-                self.plainTextEdit_filename.setPlainText(files + '.pdf')
-                logging.info('Save file as: {}.pdf'.format(files))
+    #     if files:
+    #         file, extension = os.path.splitext(files)
+    #         if extension:  # Check file extension
+    #             if '.pdf' in extension:
+    #                 logging.info('Save file as: {}'.format(files))
+    #             else:
+    #                 self.warningbox(self.extension_fail + ' (' + extension + ')')
+    #                 logging.error('Save file as: {} is not allowed'.format(extension))
+    #         else:
+    #             logging.info('Save file as: {}.pdf'.format(files))
 
     # Merge Files
     def merge_files(self):
-        save_location = self.plainTextEdit_filename.toPlainText()
+        if self.last_path:
+            files, _ = QFileDialog.getSaveFileName(self, " ", self.last_path,
+                                                    self.files_filename_window)
+        else:
+            files, _ = QFileDialog.getSaveFileName(self, " ", start_location,
+                                                    self.files_filename_window)       
+
+        if not files:
+            return
+        file, extension = os.path.splitext(files)
+        if extension:  # Check file extension
+            if '.pdf' in extension:
+                save_location = files
+                logging.info('Save file as: {}'.format(files))
+            else:
+                self.warningbox(self.extension_fail + ' (' + extension + ')')
+                logging.error('Save file as: {} is not allowed'.format(extension))
+        else:
+            save_location = files + '.pdf'
+            logging.info('Save file as: {}.pdf'.format(files))
 
         # Checks
         if len(self.files_total) < 2:
@@ -269,7 +291,6 @@ class MainPage(QtWidgets.QMainWindow):
             logging.error('No save location set')
             self.warningbox(self.no_save_loc)  # No save location
             return
-
         if save_location in self.files_total:
             logging.error('Bad save location')
             self.warningbox(self.bad_save_loc)
@@ -343,7 +364,6 @@ class MainPage(QtWidgets.QMainWindow):
         self.plainTextEdit_source_files.clear()
         self.files_total = []
         self.toolButton_choose_files.setEnabled(True)
-        self.plainTextEdit_filename.clear()
         self.checkBox_open_file.setChecked(False)
         logging.info('Reset all fields completed')
 
