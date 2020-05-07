@@ -88,6 +88,11 @@ class MainPage(QtWidgets.QMainWindow):
         self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
         self.toolButton_clear_field.clicked.connect(self.clear_field)
 
+        # Move buttons
+        self.toolButton_moveup.clicked.connect(self.move_up)
+        self.toolButton_movedown.clicked.connect(self.move_down)
+
+
         # Merge button
         # pushButton_merge
         self.pushButton_merge.clicked.connect(self.merge_files)
@@ -113,8 +118,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 20 bestanden samen te voegen'
             self.extension_fail = 'Deze extensie is niet toegestaan'
             self.little_docs = 'Upload minimaal 2 PDF documenten'
-            self.no_save_loc = 'Bepaal de locatie voor het opslaan'
-            self.bad_save_loc = 'Ongeldige opslaglocatie'
+            self.no_save_loc = 'Bepaal de lokatie voor het opslaan'
+            self.bad_save_loc = 'Ongeldige opslaglokatie'
             self.cant_open_file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
             self.directory_not_found = 'De bestanden kunnen niet verwijderd worden, de directory is niet gevonden.'
             self.merge_completed = 'Het samenvoegen is gelukt!'
@@ -162,11 +167,14 @@ class MainPage(QtWidgets.QMainWindow):
             os.mkdir(self.tempdir)
 
     def move_up(self):
-        pass
+        row = self.plainTextEdit_source_files.currentRow()
+        item = self.plainTextEdit_source_files.takeItem(row)
+        self.plainTextEdit_source_files.insertItem(row-1, item)
 
     def move_down(self):
-        pass
-
+        row = self.plainTextEdit_source_files.currentRow()
+        item = self.plainTextEdit_source_files.takeItem(row)
+        self.plainTextEdit_source_files.insertItem(row+1, item)
 
     def backup_files(self, files: list):
         """Creates an unique dir and backs up files"""

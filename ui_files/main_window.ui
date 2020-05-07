@@ -150,6 +150,32 @@
      <string>Toegevoegde bestanden</string>
     </property>
    </widget>
+   <widget class="QToolButton" name="toolButton_moveup">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>250</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Omhoog</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_movedown">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>250</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Omlaag</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
