@@ -8,8 +8,10 @@ import subprocess
 from send2trash import send2trash
 import urllib3
 import webbrowser
-
-# from fbs_runtime.application_context.PyQt5 import ApplicationContext
+import time
+import tempfile
+from shutil import copyfile
+from datetime import datetime
 
 from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog, QMainWindow
 
@@ -17,7 +19,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QPixmap,  QFont
 
-current_version = float(1.2)
+current_version = float(2.0)
 
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
@@ -33,6 +35,28 @@ def resource_path(relative_path):
         base_path = os.environ.get("_MEIPASS2", os.path.abspath("."))
     return os.path.join(base_path, relative_path)
 
+# Create temp folder
+tempdir = tempfile.gettempdir() + "\\MergePDF"
+if not os.path.exists(tempdir):
+    os.mkdir(tempdir)
+
+# Set logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    filename=f'{tempdir}\\MergePDF.log',
+                    filemode='a')
+date_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+# logging.disable(logging.DEBUG)
+# FIXME Console logging alleen voor ontwikkeling, uitzetten bij een release
+# define a Handler which writes INFO messages or higher to the sys.stderr
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+# set a format which is simpler for console use
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+# tell the handler to use this format
+console.setFormatter(formatter)
+# add the handler to the root logger
+logging.getLogger('').addHandler(console)
 
 # Set logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -55,7 +79,6 @@ elif 'Darwin' in what_os:
 else:
     exit()
 
-
 # PyQT GUI
 class MainPage(QtWidgets.QMainWindow):
     def __init__(self):
@@ -63,14 +86,16 @@ class MainPage(QtWidgets.QMainWindow):
         # Load Main UI
         loadUi(resource_path('ui_files/main_window.ui'), self)
         # Set Size Application
-        self.setFixedSize(640, 480)
+        self.setFixedSize(390, 450)
         # Set Application Icon
         self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
+
+        self.tempdir = tempdir
 
         # Logo
         # label_logo
         self.label_logo = QLabel(self)
-        self.label_logo.setGeometry(50, 40, 50, 50)
+        self.label_logo.setGeometry(170, 35, 50, 50)
         pixmap = QPixmap(resource_path('assets/merge-logo.svg'))
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
@@ -85,9 +110,13 @@ class MainPage(QtWidgets.QMainWindow):
         self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
         self.toolButton_clear_field.clicked.connect(self.clear_field)
 
-        # Save-as button
-        # toolButton_save_as
-        self.toolButton_save_as.clicked.connect(self.save_as)
+        # Move buttons
+        self.toolButton_moveup.setIcon(QtGui.QIcon(resource_path('assets/arrow-up.png')))
+        self.toolButton_movedown.setIcon(QtGui.QIcon(resource_path('assets/arrow-down.png')))
+        self.toolButton_moveup.setToolTip('Verplaats bestand naar boven')
+        self.toolButton_movedown.setToolTip('Verplaats bestand naar beneden')
+        self.toolButton_moveup.clicked.connect(self.move_up)
+        self.toolButton_movedown.clicked.connect(self.move_down)
 
         # Merge button
         # pushButton_merge
@@ -97,12 +126,11 @@ class MainPage(QtWidgets.QMainWindow):
         # Taal instellingen
         self.lang, self.enc = locale.getdefaultlocale()
 
+        self.last_path = None
+
         if 'nl' in self.lang:
             logging.info('Language: Nederlands')
-            self.plainTextEdit_source_files.setPlaceholderText('PDF bestanden')
-            self.toolButton_choose_files.setText('Bestanden uploaden...')
-            self.toolButton_save_as.setText('Opslaan als...')
-            self.plainTextEdit_filename.setPlaceholderText('Locatie voor opslaan')
+            self.toolButton_choose_files.setText('Bestanden toevoegen...')
             self.checkBox_open_file.setText('Open het bestand na het samenvoegen')
             self.checkBox_delete_old.setText('Verwijder oude bestanden')
             self.pushButton_merge.setText('Samenvoegen')
@@ -115,7 +143,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.max_files = 'Maximum bereikt!\nHet is niet mogelijk om meer dan 20 bestanden samen te voegen'
             self.extension_fail = 'Deze extensie is niet toegestaan'
             self.little_docs = 'Upload minimaal 2 PDF documenten'
-            self.no_save_loc = 'Bepaal de locatie voor het opslaan'
+            self.no_save_loc = 'Bepaal de lokatie voor het opslaan'
+            self.bad_save_loc = 'Ongeldige opslaglokatie'
             self.cant_open_file = 'Het nieuwe bestand is aangemaakt maar kon niet geopend worden.'
             self.directory_not_found = 'De bestanden kunnen niet verwijderd worden, de directory is niet gevonden.'
             self.merge_completed = 'Het samenvoegen is gelukt!'
@@ -128,7 +157,6 @@ class MainPage(QtWidgets.QMainWindow):
             self.plainTextEdit_source_files.setPlaceholderText('PDF files')
             self.toolButton_choose_files.setText('Upload files...')
             self.toolButton_save_as.setText('Save as...')
-            self.plainTextEdit_filename.setPlaceholderText('Save location')
             self.checkBox_open_file.setText('Open file after merge')
             self.checkBox_delete_old.setText('Delete old files')
             self.pushButton_merge.setText('Merge')
@@ -142,6 +170,7 @@ class MainPage(QtWidgets.QMainWindow):
             self.extension_fail = 'Extension not allowed'
             self.little_docs = 'Upload at least 2 PDF files'
             self.no_save_loc = 'Determine the location for saving'
+            self.bad_save_loc = 'Invalid save location'
             self.cant_open_file = 'The new file has been created but could not be opened.'
             self.directory_not_found = 'Files can\'t be deleted, directory not found.'
             self.merge_completed = 'File merge completed!'
@@ -157,6 +186,24 @@ class MainPage(QtWidgets.QMainWindow):
 
         # Update button
         self.actionUpdate_software.triggered.connect(self.website_update)
+
+    def move_up(self):
+        row = self.plainTextEdit_source_files.currentRow()
+        item = self.plainTextEdit_source_files.takeItem(row)
+        self.plainTextEdit_source_files.insertItem(row-1, item)
+
+    def move_down(self):
+        row = self.plainTextEdit_source_files.currentRow()
+        item = self.plainTextEdit_source_files.takeItem(row)
+        self.plainTextEdit_source_files.insertItem(row+1, item)
+
+    def backup_files(self, files: list):
+        """Creates an unique dir and backs up files"""
+        backup_dir = f"{self.tempdir}\\{time.time():.0f}"
+        os.mkdir(backup_dir)
+        for file in files:
+            file_name = os.path.basename(file)
+            copyfile(file, f"{backup_dir}\\{file_name}")
 
     def website_update(self):
         webbrowser.open('https://github.com/jebr/MergePDF/releases')
@@ -182,7 +229,7 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
-                self.statusBar().showMessage(self.statusbar.msg + str(new_version))
+                self.statusBar().showMessage(self.statusbar.msg + str(current_version))
                 self.actionUpdate_software.setEnabled(False)
 
         except urllib3.exceptions.MaxRetryError:
@@ -192,18 +239,27 @@ class MainPage(QtWidgets.QMainWindow):
 
     # Functions
     def choose_files(self):
-        files, _ = QFileDialog.getOpenFileNames(self, " ", start_location,
-                                                self.files_filename_window)
+        if not self.last_path:
+            files, _ = QFileDialog.getOpenFileNames(self, " ", start_location,
+                                                    self.files_filename_window)
+        else:
+            files, _ = QFileDialog.getOpenFileNames(self, " ", self.last_path,
+                                                    self.files_filename_window)            
 
         # File selector
         for i in range(len(files)):
             if len(self.files_total) < 20:
-                self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
+                self.last_path = os.path.dirname(files[i])
+                if files[i] in self.files_total:
+                    continue
+                # self.plainTextEdit_source_files.appendPlainText(os.path.basename(files[i]))
+                self.plainTextEdit_source_files.addItem(os.path.basename(files[i]))
                 self.files_total.append(files[i])
             else:
                 self.toolButton_choose_files.setEnabled(False)
                 logging.error('More than 20 files uploaded')
                 self.criticalbox(self.max_files)
+                return
 
         logging.info('Files uploaded: {}'.format(len(self.files_total)))
 
@@ -214,27 +270,28 @@ class MainPage(QtWidgets.QMainWindow):
         self.toolButton_choose_files.setEnabled(True)
         logging.info('Files uploaded: {}'.format(len(self.files_total)))
 
-    # Save merged file
-    def save_as(self):
-        files, _ = QFileDialog.getSaveFileName(self, " ", start_location,
-                                                self.files_filename_window)
-
-        if files:
-            file, extension = os.path.splitext(files)
-            if extension:  # Check file extension
-                if '.pdf' in extension:
-                    self.plainTextEdit_filename.setPlainText(files)
-                    logging.info('Save file as: {}'.format(files))
-                else:
-                    self.warningbox(self.extension_fail + ' (' + extension + ')')
-                    logging.error('Save file as: {} is not allowed'.format(extension))
-            else:
-                self.plainTextEdit_filename.setPlainText(files + '.pdf')
-                logging.info('Save file as: {}.pdf'.format(files))
-
     # Merge Files
     def merge_files(self):
-        save_location = self.plainTextEdit_filename.toPlainText()
+        if self.last_path:
+            files, _ = QFileDialog.getSaveFileName(self, " ", self.last_path,
+                                                    self.files_filename_window)
+        else:
+            files, _ = QFileDialog.getSaveFileName(self, " ", start_location,
+                                                    self.files_filename_window)       
+
+        if not files:
+            return
+        file, extension = os.path.splitext(files)
+        if extension:  # Check file extension
+            if '.pdf' in extension:
+                save_location = files
+                logging.info('Save file as: {}'.format(files))
+            else:
+                self.warningbox(self.extension_fail + ' (' + extension + ')')
+                logging.error('Save file as: {} is not allowed'.format(extension))
+        else:
+            save_location = files + '.pdf'
+            logging.info('Save file as: {}.pdf'.format(files))
 
         # Checks
         if len(self.files_total) < 2:
@@ -245,6 +302,12 @@ class MainPage(QtWidgets.QMainWindow):
             logging.error('No save location set')
             self.warningbox(self.no_save_loc)  # No save location
             return
+        if save_location in self.files_total:
+            logging.error('Bad save location')
+            self.warningbox(self.bad_save_loc)
+            return
+
+        self.backup_files(self.files_total)
 
         writer = PyPDF2.PdfFileWriter()  # Openen blanco PDF bestand
 
@@ -312,7 +375,6 @@ class MainPage(QtWidgets.QMainWindow):
         self.plainTextEdit_source_files.clear()
         self.files_total = []
         self.toolButton_choose_files.setEnabled(True)
-        self.plainTextEdit_filename.clear()
         self.checkBox_open_file.setChecked(False)
         logging.info('Reset all fields completed')
 
@@ -362,12 +424,10 @@ class InfoWindow(QDialog):
 
 
 def main():
-    # appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
     app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
     sys.exit(app.exec())
-    # exit_code = appctxt.app.exec_()  # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
 
 

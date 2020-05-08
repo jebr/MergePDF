@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>409</width>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,8 @@
    <widget class="QPushButton" name="pushButton_merge">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>360</y>
+      <x>260</x>
+      <y>320</y>
       <width>121</width>
       <height>61</height>
      </rect>
@@ -40,8 +40,8 @@
    <widget class="QCheckBox" name="checkBox_delete_old">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>390</y>
+      <x>10</x>
+      <y>350</y>
       <width>251</width>
       <height>20</height>
      </rect>
@@ -55,28 +55,15 @@
      <string>Verwijderen oude bestanden</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_logo">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QToolButton" name="toolButton_choose_files">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>250</y>
-      <width>141</width>
+      <x>10</x>
+      <y>280</y>
+      <width>151</width>
       <height>22</height>
      </rect>
     </property>
@@ -89,35 +76,11 @@
      <string>Bestanden uploaden...</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_source_files">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>100</y>
-      <width>371</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-    <property name="textInteractionFlags">
-     <set>Qt::NoTextInteraction</set>
-    </property>
-   </widget>
    <widget class="QToolButton" name="toolButton_clear_field">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>250</y>
+      <x>350</x>
+      <y>280</y>
       <width>31</width>
       <height>22</height>
      </rect>
@@ -126,53 +89,11 @@
      <string>...</string>
     </property>
    </widget>
-   <widget class="QToolButton" name="toolButton_save_as">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>280</y>
-      <width>141</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Opslaan als...</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_filename">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>310</y>
-      <width>371</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-    <property name="textInteractionFlags">
-     <set>Qt::NoTextInteraction</set>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="checkBox_open_file">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>360</y>
+      <x>10</x>
+      <y>320</y>
       <width>251</width>
       <height>20</height>
      </rect>
@@ -186,13 +107,88 @@
      <string>Open het bestand na het samenvoegen</string>
     </property>
    </widget>
+   <widget class="QListWidget" name="plainTextEdit_source_files">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>371</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_moveup">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>280</y>
+      <width>31</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_movedown">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>280</y>
+      <width>31</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>30</y>
+      <width>160</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_logo">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>MergePDF</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>409</width>
      <height>21</height>
     </rect>
    </property>
