@@ -4,7 +4,6 @@
 
 
 **Release 2.0**
-
 *8-5-2020*
 
 <a href="https://github.com/jebr/MergePDF/releases" Download>
