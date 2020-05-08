@@ -3,8 +3,8 @@
 # MergePDF
 
 
-**Release 1.2**  
-*15-1-2019*
+**Release 2.0**
+*8-5-2020*
 
 <a href="https://github.com/jebr/MergePDF/releases" Download>
   <img src="assets/download.png" alt="Download programma" width="200" height="50">
@@ -12,6 +12,16 @@
 
 </br>
 </br>
+
+- Toegevoegd: Windows Installer
+- Wijziging: Gebruikersinterface
+- Verbetering: Crash bij het opslaan van een PDF met dezelfde bestandsnaam
+- Verbetering: Bug fixes en prestatieverbeteringen
+
+---
+
+**Release 1.2**  
+*15-1-2019*
 
 - Toegevoegd: Update controle
 - Toegevoegd: Update button
