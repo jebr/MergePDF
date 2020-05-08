@@ -58,10 +58,6 @@ console.setFormatter(formatter)
 # add the handler to the root logger
 logging.getLogger('').addHandler(console)
 
-# Set logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logging.disable(logging.DEBUG)
-
 # What OS is running
 what_os = platform.system()
 if 'Windows' in what_os:
