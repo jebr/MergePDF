@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
-    <height>449</height>
+    <width>409</width>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>290</y>
+      <y>320</y>
       <width>121</width>
       <height>61</height>
      </rect>
@@ -41,7 +41,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
+      <y>350</y>
       <width>251</width>
       <height>20</height>
      </rect>
@@ -55,19 +55,6 @@
      <string>Verwijderen oude bestanden</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_logo">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QToolButton" name="toolButton_choose_files">
     <property name="enabled">
      <bool>true</bool>
@@ -75,7 +62,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>250</y>
+      <y>280</y>
       <width>151</width>
       <height>22</height>
      </rect>
@@ -93,7 +80,7 @@
     <property name="geometry">
      <rect>
       <x>350</x>
-      <y>250</y>
+      <y>280</y>
       <width>31</width>
       <height>22</height>
      </rect>
@@ -106,7 +93,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>290</y>
+      <y>320</y>
       <width>251</width>
       <height>20</height>
      </rect>
@@ -124,57 +111,76 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
+      <y>100</y>
       <width>371</width>
       <height>171</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>371</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Toegevoegde bestanden</string>
-    </property>
-   </widget>
    <widget class="QToolButton" name="toolButton_moveup">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>250</y>
-      <width>51</width>
+      <x>290</x>
+      <y>280</y>
+      <width>31</width>
       <height>22</height>
      </rect>
     </property>
     <property name="text">
-     <string>Omhoog</string>
+     <string>...</string>
     </property>
    </widget>
    <widget class="QToolButton" name="toolButton_movedown">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>250</y>
-      <width>51</width>
+      <x>320</x>
+      <y>280</y>
+      <width>31</width>
       <height>22</height>
      </rect>
     </property>
     <property name="text">
-     <string>Omlaag</string>
+     <string>...</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>30</y>
+      <width>160</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_logo">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>MergePDF</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -182,7 +188,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>392</width>
+     <width>409</width>
      <height>21</height>
     </rect>
    </property>

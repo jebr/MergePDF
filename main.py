@@ -11,8 +11,7 @@ import webbrowser
 import time
 import tempfile
 from shutil import copyfile
-
-# from fbs_runtime.application_context.PyQt5 import ApplicationContext
+from datetime import datetime
 
 from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog, QMainWindow
 
@@ -20,7 +19,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QPixmap,  QFont
 
-current_version = float(1.2)
+current_version = float(2.0)
 
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
@@ -36,6 +35,28 @@ def resource_path(relative_path):
         base_path = os.environ.get("_MEIPASS2", os.path.abspath("."))
     return os.path.join(base_path, relative_path)
 
+# Create temp folder
+tempdir = tempfile.gettempdir() + "\\MergePDF"
+if not os.path.exists(tempdir):
+    os.mkdir(tempdir)
+
+# Set logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    filename=f'{tempdir}\\MergePDF.log',
+                    filemode='a')
+date_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+# logging.disable(logging.DEBUG)
+# FIXME Console logging alleen voor ontwikkeling, uitzetten bij een release
+# define a Handler which writes INFO messages or higher to the sys.stderr
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+# set a format which is simpler for console use
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+# tell the handler to use this format
+console.setFormatter(formatter)
+# add the handler to the root logger
+logging.getLogger('').addHandler(console)
 
 # Set logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -58,7 +79,6 @@ elif 'Darwin' in what_os:
 else:
     exit()
 
-
 # PyQT GUI
 class MainPage(QtWidgets.QMainWindow):
     def __init__(self):
@@ -66,14 +86,16 @@ class MainPage(QtWidgets.QMainWindow):
         # Load Main UI
         loadUi(resource_path('ui_files/main_window.ui'), self)
         # Set Size Application
-        self.setFixedSize(390, 410)
+        self.setFixedSize(390, 450)
         # Set Application Icon
         self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
+
+        self.tempdir = tempdir
 
         # Logo
         # label_logo
         self.label_logo = QLabel(self)
-        self.label_logo.setGeometry(300, 30, 50, 50)
+        self.label_logo.setGeometry(170, 35, 50, 50)
         pixmap = QPixmap(resource_path('assets/merge-logo.svg'))
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
@@ -89,9 +111,12 @@ class MainPage(QtWidgets.QMainWindow):
         self.toolButton_clear_field.clicked.connect(self.clear_field)
 
         # Move buttons
+        self.toolButton_moveup.setIcon(QtGui.QIcon(resource_path('assets/arrow-up.png')))
+        self.toolButton_movedown.setIcon(QtGui.QIcon(resource_path('assets/arrow-down.png')))
+        self.toolButton_moveup.setToolTip('Verplaats bestand naar boven')
+        self.toolButton_movedown.setToolTip('Verplaats bestand naar beneden')
         self.toolButton_moveup.clicked.connect(self.move_up)
         self.toolButton_movedown.clicked.connect(self.move_down)
-
 
         # Merge button
         # pushButton_merge
@@ -162,10 +187,6 @@ class MainPage(QtWidgets.QMainWindow):
         # Update button
         self.actionUpdate_software.triggered.connect(self.website_update)
 
-        self.tempdir = tempfile.gettempdir() + "\\MergePDF"
-        if not os.path.exists(self.tempdir):
-            os.mkdir(self.tempdir)
-
     def move_up(self):
         row = self.plainTextEdit_source_files.currentRow()
         item = self.plainTextEdit_source_files.takeItem(row)
@@ -208,7 +229,7 @@ class MainPage(QtWidgets.QMainWindow):
                 logging.info('Current software version: v{}'.format(current_version))
                 logging.info('Latest release: v{}'.format(new_version))
                 logging.info('Software up-to-date')
-                self.statusBar().showMessage(self.statusbar.msg + str(new_version))
+                self.statusBar().showMessage(self.statusbar.msg + str(current_version))
                 self.actionUpdate_software.setEnabled(False)
 
         except urllib3.exceptions.MaxRetryError:
@@ -248,24 +269,6 @@ class MainPage(QtWidgets.QMainWindow):
         self.files_total = []
         self.toolButton_choose_files.setEnabled(True)
         logging.info('Files uploaded: {}'.format(len(self.files_total)))
-
-    # Save merged file
-    # def save_as(self):
-    #     if self.last_path:
-    #         files, _ = QFileDialog.getSaveFileName(self, " ", self.last_path,
-    #                                                 self.files_filename_window)
-    #     else:
-
-    #     if files:
-    #         file, extension = os.path.splitext(files)
-    #         if extension:  # Check file extension
-    #             if '.pdf' in extension:
-    #                 logging.info('Save file as: {}'.format(files))
-    #             else:
-    #                 self.warningbox(self.extension_fail + ' (' + extension + ')')
-    #                 logging.error('Save file as: {} is not allowed'.format(extension))
-    #         else:
-    #             logging.info('Save file as: {}.pdf'.format(files))
 
     # Merge Files
     def merge_files(self):
@@ -400,7 +403,7 @@ class InfoWindow(QDialog):
         super().__init__(None, QtCore.Qt.WindowCloseButtonHint)
         loadUi(resource_path('ui_files/info_dialog.ui'), self)
         self.setWindowIcon(QtGui.QIcon(resource_path('assets/merge-logo.svg')))
-        self.setFixedSize(220, 240)
+        self.setFixedSize(320, 240)
         # Logo
         self.label_info_logo.setText("")
         self.label_info_logo = QLabel(self)
@@ -421,12 +424,10 @@ class InfoWindow(QDialog):
 
 
 def main():
-    # appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
     app = QApplication(sys.argv)
     widget = MainPage()
     widget.show()
     sys.exit(app.exec())
-    # exit_code = appctxt.app.exec_()  # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
 
 
