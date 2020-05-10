@@ -111,8 +111,8 @@ class MainPage(QtWidgets.QMainWindow):
         # Move buttons
         self.toolButton_moveup.setIcon(QtGui.QIcon(resource_path('assets/arrow-up.png')))
         self.toolButton_movedown.setIcon(QtGui.QIcon(resource_path('assets/arrow-down.png')))
-        self.toolButton_moveup.setToolTip('Verplaats bestand naar boven')
-        self.toolButton_movedown.setToolTip('Verplaats bestand naar beneden')
+        self.toolButton_moveup.setToolTip(self.move_file_up)
+        self.toolButton_movedown.setToolTip(self.move_file_down)
         self.toolButton_moveup.clicked.connect(self.move_up)
         self.toolButton_movedown.clicked.connect(self.move_down)
 
@@ -149,6 +149,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.files_to_trash = 'De originele bestanden zijn naar de prullenbak verplaatst'
             self.files_deleted = 'De originele bestanden zijn verwijderd'
             self.update_available = 'Er is een update beschikbaar\n Wil je deze nu downloaden?'
+            self.move_file_up = 'Verplaats bestand omhoog'
+            self.move_file_down = 'Verplaats bestand omlaag'
         else:
             logging.info('Language: English')
             # Buttons and fields EN
@@ -173,6 +175,8 @@ class MainPage(QtWidgets.QMainWindow):
             self.files_to_trash = 'The original files are moved to the recycle bin'
             self.files_deleted = 'The original files are deleted'
             self.update_available = 'There is an update available\n Do you want to download it now?'
+            self.move_file_up = 'Move file up'
+            self.move_file_down = 'Move file down'
 
         # Info menu
         self.actionInfo.triggered.connect(self.open_info_window)
