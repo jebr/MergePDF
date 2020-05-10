@@ -3,4 +3,3 @@ PyQT5
 Send2Trash
 urllib3
 webbrowser
-fbs

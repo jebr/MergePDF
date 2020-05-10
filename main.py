@@ -96,7 +96,10 @@ class MainPage(QtWidgets.QMainWindow):
         # Logo
         # label_logo
         self.label_logo = QLabel(self)
-        self.label_logo.setGeometry(170, 35, 50, 50)
+        if 'Darwin' in what_os:
+            self.label_logo.setGeometry(170, 10, 50, 50)
+        else:
+            self.label_logo.setGeometry(170, 35, 50, 50)
         pixmap = QPixmap(resource_path('assets/merge-logo.svg'))
         pixmap = pixmap.scaledToWidth(50)
         self.label_logo.setPixmap(pixmap)
