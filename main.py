@@ -14,7 +14,6 @@ from shutil import copyfile
 from datetime import datetime
 
 from PyQt5.QtWidgets import QApplication, QLabel, QFileDialog, QMessageBox, QDialog, QMainWindow
-
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QPixmap,  QFont
@@ -35,8 +34,27 @@ def resource_path(relative_path):
         base_path = os.environ.get("_MEIPASS2", os.path.abspath("."))
     return os.path.join(base_path, relative_path)
 
+# What OS is running
+what_os = platform.system()
+if 'Windows' in what_os:
+    username = os.environ.get('USERNAME')
+    start_location = 'c:\\Users\\{}\\Documents'.format(username)
+    tempdir = tempfile.gettempdir() + "\\MergePDF"
+    logging.info('OS: Windows')
+elif 'Linux' in what_os:
+    username = os.environ.get('USER')
+    start_location = '/home/{}/Documents'.format(username)
+    tempdir = tempfile.gettempdir() + "/MergePDF"
+    logging.info('OS: Linux')
+elif 'Darwin' in what_os:
+    username = os.environ.get('USER')
+    start_location = '/Users/{}/Documents'.format(username)
+    tempdir = tempfile.gettempdir() + "/MergePDF"
+    logging.info('OS: MacOS')
+else:
+    exit()
+
 # Create temp folder
-tempdir = tempfile.gettempdir() + "\\MergePDF"
 if not os.path.exists(tempdir):
     os.mkdir(tempdir)
 
@@ -58,22 +76,6 @@ console.setFormatter(formatter)
 # add the handler to the root logger
 logging.getLogger('').addHandler(console)
 
-# What OS is running
-what_os = platform.system()
-if 'Windows' in what_os:
-    username = os.environ.get('USERNAME')
-    start_location = 'c:\\Users\\{}\\Documents'.format(username)
-    logging.info('OS: Windows')
-elif 'Linux' in what_os:
-    username = os.environ.get('USER')
-    start_location = '/home/{}/Documents'.format(username)
-    logging.info('OS: Linux')
-elif 'Darwin' in what_os:
-    username = os.environ.get('USER')
-    start_location = '/Users/{}/Documents'.format(username)
-    logging.info('OS: MacOS')
-else:
-    exit()
 
 # PyQT GUI
 class MainPage(QtWidgets.QMainWindow):
@@ -150,7 +152,6 @@ class MainPage(QtWidgets.QMainWindow):
         else:
             logging.info('Language: English')
             # Buttons and fields EN
-            self.plainTextEdit_source_files.setPlaceholderText('PDF files')
             self.toolButton_choose_files.setText('Upload files...')
             self.toolButton_save_as.setText('Save as...')
             self.checkBox_open_file.setText('Open file after merge')
