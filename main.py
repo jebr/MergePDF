@@ -153,7 +153,6 @@ class MainPage(QtWidgets.QMainWindow):
             logging.info('Language: English')
             # Buttons and fields EN
             self.toolButton_choose_files.setText('Upload files...')
-            self.toolButton_save_as.setText('Save as...')
             self.checkBox_open_file.setText('Open file after merge')
             self.checkBox_delete_old.setText('Delete old files')
             self.pushButton_merge.setText('Merge')
