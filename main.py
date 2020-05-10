@@ -40,16 +40,19 @@ if 'Windows' in what_os:
     username = os.environ.get('USERNAME')
     start_location = 'c:\\Users\\{}\\Documents'.format(username)
     tempdir = tempfile.gettempdir() + "\\MergePDF"
+    logfile = tempdir + '\\MergePDF.log'
     logging.info('OS: Windows')
 elif 'Linux' in what_os:
     username = os.environ.get('USER')
     start_location = '/home/{}/Documents'.format(username)
     tempdir = tempfile.gettempdir() + "/MergePDF"
+    logfile = tempdir + '/MergePDF.log'
     logging.info('OS: Linux')
 elif 'Darwin' in what_os:
     username = os.environ.get('USER')
     start_location = '/Users/{}/Documents'.format(username)
     tempdir = tempfile.gettempdir() + "/MergePDF"
+    logfile = tempdir + '/MergePDF.log'
     logging.info('OS: MacOS')
 else:
     exit()
@@ -61,7 +64,7 @@ if not os.path.exists(tempdir):
 # Set logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s',
-                    filename=f'{tempdir}\\MergePDF.log',
+                    filename=f'{logfile}',
                     filemode='a')
 date_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
 # logging.disable(logging.DEBUG)
@@ -177,7 +180,7 @@ class MainPage(QtWidgets.QMainWindow):
         self.toolButton_movedown.setToolTip(self.move_file_down)
         self.toolButton_moveup.clicked.connect(self.move_up)
         self.toolButton_movedown.clicked.connect(self.move_down)
-        
+
         # Info menu
         self.actionInfo.triggered.connect(self.open_info_window)
 
