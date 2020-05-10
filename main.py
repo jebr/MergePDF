@@ -108,14 +108,6 @@ class MainPage(QtWidgets.QMainWindow):
         self.toolButton_clear_field.setIcon(QtGui.QIcon(resource_path('assets/delete.ico')))
         self.toolButton_clear_field.clicked.connect(self.clear_field)
 
-        # Move buttons
-        self.toolButton_moveup.setIcon(QtGui.QIcon(resource_path('assets/arrow-up.png')))
-        self.toolButton_movedown.setIcon(QtGui.QIcon(resource_path('assets/arrow-down.png')))
-        self.toolButton_moveup.setToolTip(self.move_file_up)
-        self.toolButton_movedown.setToolTip(self.move_file_down)
-        self.toolButton_moveup.clicked.connect(self.move_up)
-        self.toolButton_movedown.clicked.connect(self.move_down)
-
         # Merge button
         # pushButton_merge
         self.pushButton_merge.clicked.connect(self.merge_files)
@@ -178,6 +170,14 @@ class MainPage(QtWidgets.QMainWindow):
             self.move_file_up = 'Move file up'
             self.move_file_down = 'Move file down'
 
+        # Move buttons
+        self.toolButton_moveup.setIcon(QtGui.QIcon(resource_path('assets/arrow-up.png')))
+        self.toolButton_movedown.setIcon(QtGui.QIcon(resource_path('assets/arrow-down.png')))
+        self.toolButton_moveup.setToolTip(self.move_file_up)
+        self.toolButton_movedown.setToolTip(self.move_file_down)
+        self.toolButton_moveup.clicked.connect(self.move_up)
+        self.toolButton_movedown.clicked.connect(self.move_down)
+        
         # Info menu
         self.actionInfo.triggered.connect(self.open_info_window)
 
